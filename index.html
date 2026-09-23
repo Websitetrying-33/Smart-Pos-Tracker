@@ -18,28 +18,8 @@
             padding: 12px;
         }
 
-        /* Language Toggle Bar */
-        .lang-bar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 8px;
-        }
-        .lang-toggle {
-            background: #ffffff;
-            border: 1px solid #ca8a04;
-            padding: 5px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.78rem;
-            color: #15803d;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        .lang-toggle:hover {
-            background: #fef08a;
-        }
-
         header {
+            position: relative;
             background: linear-gradient(135deg, #14532d, #15803d);
             color: #ffffff;
             padding: 14px 20px;
@@ -48,6 +28,37 @@
             box-shadow: 0 4px 12px rgba(20, 83, 45, 0.2);
             text-align: center;
             border: 1.5px solid #ca8a04;
+        }
+
+        .lang-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid #fef08a;
+            color: #fef08a;
+            padding: 5px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .lang-toggle:hover {
+            background: rgba(254, 240, 138, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .lang-toggle {
+                position: static;
+                transform: none;
+                margin-bottom: 8px;
+                display: inline-block;
+            }
+            header {
+                padding-top: 10px;
+            }
         }
 
         .header-title {
@@ -348,12 +359,10 @@
 </head>
 <body>
 
-    <!-- Language Toggle Bar -->
-    <div class="lang-bar">
-        <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">🌐 Switch to English</button>
-    </div>
-
     <header>
+        <!-- Language Toggle button sa loob ng Banner (Kanang Itaas) -->
+        <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">🌐 Switch to English</button>
+
         <div class="header-title">🌾 SMART POS & STORE TRACKER 🌾</div>
         <div class="header-sub" data-translate="headerSub">Capital Recovery Mode - Auto SMS Listener Connected</div>
         <div class="status-badge" id="smsStatusBadge">📱 Node.js Server: Waiting for SMS...</div>
@@ -632,11 +641,8 @@
         let gcashCashOutVol = 0;
         let gcashTotalFees = 0;
         let gcashTransactions = [];
-        let processedRefNos = new Set(); // Para maiwasan ang duplicate entries
+        let processedRefNos = new Set();
 
-        // Updated GCash Automatic Fee Matrix: 
-        // ₱1 to ₱999 = ₱10 fee
-        // ₱1,000 and above = ₱20 per ₱1,000 (or fraction)
         function calculateAutomaticFee(amount) {
             if (amount <= 0) return 0;
             if (amount < 1000) return 10;
