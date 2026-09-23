@@ -13,7 +13,11 @@
         }
 
         body {
-            background-color: #faf6eb;
+            /* Background na may subtle rice grains pattern/texture */
+            background-color: #fcf8ec;
+            background-image: radial-gradient(#d4a373 0.75px, transparent 0.75px), radial-gradient(#d4a373 0.75px, #fcf8ec 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
             color: #334155;
             padding: 12px;
         }
@@ -81,7 +85,7 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.96);
             padding: 12px;
             border-radius: 12px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
@@ -90,7 +94,7 @@
         }
 
         .card-bigasan {
-            background-color: #fefdf6;
+            background-color: #fffefb;
             border: 2px solid #ca8a04;
         }
 
@@ -643,7 +647,6 @@
             document.getElementById("btnPrint").innerText = t.printRep;
             document.getElementById("btnReset").innerText = t.resetAll;
 
-            // I-update ang mga placeholder at delete buttons sa mga dynamic rows
             document.querySelectorAll(".rice-name-input").forEach(input => {
                 input.placeholder = t.placeholderName;
             });
