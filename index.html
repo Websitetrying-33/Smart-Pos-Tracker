@@ -5,331 +5,228 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart POS & Store Tracker</title>
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --accent-color: #27ae60;
-            --danger-color: #c0392b;
-            --bg-color: #f4f6f7;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
             margin: 0;
             padding: 20px;
+            color: #333;
         }
-
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            background: var(--primary-color);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-        }
-
-        h1, h3 {
-            margin: 0;
-        }
-
-        .card {
-            background: var(--card-bg);
+            background: #ffffff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            overflow-x: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
+        h2, h3 {
+            color: #2c3e50;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
-            min-width: 600px;
+            margin-bottom: 20px;
         }
-
         th, td {
+            border: 1px solid #ddd;
             padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f8f9fa;
-        }
-
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 6px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .btn-add {
-            background-color: var(--accent-color);
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        .btn-delete {
-            background-color: var(--danger-color);
-            color: white;
-            padding: 5px 10px;
-        }
-
-        .summary-box {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .summary-card {
-            flex: 1;
-            background: #eef2f3;
-            padding: 15px;
-            border-radius: 6px;
             text-align: center;
         }
-
-        .summary-card h4 {
-            margin: 0 0 5px 0;
-            color: #555;
+        th {
+            background-color: #2c3e50;
+            color: white;
         }
-
-        .summary-card p {
-            font-size: 1.2em;
+        input[type="text"], input[type="number"], select {
+            width: 90%;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+        .btn {
+            padding: 8px 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
             font-weight: bold;
-            margin: 0;
-            color: var(--accent-color);
+        }
+        .btn:hover {
+            background-color: #219653;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        .summary-section {
+            background: #eecfbf;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>Smart POS & Store Tracker</h1>
-        <button onclick="resetAll()" style="background-color: #e74c3c; color: white;">Reset All</button>
-    </header>
+    <h2>Smart POS & Store Tracker</h2>
 
     <!-- Rice Inventory Section -->
-    <div class="card">
-        <h3>Rice Inventory & Sales</h3>
-        <button onclick="addNewRiceRow()" class="btn-add">+ Add Rice Variety</button>
-        
-        <table id="riceTable">
-            <thead>
-                <tr>
-                    <th>Rice Variety</th>
-                    <th>Sacks Bought</th>
-                    <th>Cost/Sack</th>
-                    <th>Sell Price/Sack</th>
-                    <th>Sacks Sold</th>
-                    <th>Remaining</th>
-                    <th>Revenue</th>
-                    <th>Profit</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="riceTableBody">
-                <!-- Default Varieties -->
-                <tr>
-                    <td><input type="text" class="rice-name" value="Sinandomeng"></td>
-                    <td><input type="number" class="sacks-bought" value="10" oninput="calculateAll()"></td>
-                    <td><input type="number" class="cost-sack" value="2000" oninput="calculateAll()"></td>
-                    <td><input type="number" class="sell-sack" value="2300" oninput="calculateAll()"></td>
-                    <td><input type="number" class="sacks-sold" value="4" oninput="calculateAll()"></td>
-                    <td class="sacks-remaining">6</td>
-                    <td class="rice-revenue">₱9,200.00</td>
-                    <td class="rice-profit">₱1,200.00</td>
-                    <td><button onclick="deleteRiceRow(this)" class="btn-delete">Delete</button></td>
-                </tr>
-                <tr>
-                    <td><input type="text" class="rice-name" value="Jaguar"></td>
-                    <td><input type="number" class="sacks-bought" value="8" oninput="calculateAll()"></td>
-                    <td><input type="number" class="cost-sack" value="1900" oninput="calculateAll()"></td>
-                    <td><input type="number" class="sell-sack" value="2200" oninput="calculateAll()"></td>
-                    <td><input type="number" class="sacks-sold" value="3" oninput="calculateAll()"></td>
-                    <td class="sacks-remaining">5</td>
-                    <td class="rice-revenue">₱6,600.00</td>
-                    <td class="rice-profit">₱900.00</td>
-                    <td><button onclick="deleteRiceRow(this)" class="btn-delete">Delete</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <h3>Rice Inventory & Sales</h3>
+    <button class="btn" onclick="addRiceRow()">+ Add Rice Variety</button>
+    <br><br>
+    <table id="riceTable">
+        <thead>
+            <tr>
+                <th>Rice Variety</th>
+                <th>Sacks Bought</th>
+                <th>Cost/Sack (₱)</th>
+                <th>Sell Price/Sack (₱)</th>
+                <th>Sacks Sold</th>
+                <th>Remaining</th>
+                <th>Revenue (₱)</th>
+                <th>Profit (₱)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="riceTableBody">
+            <tr>
+                <td><input type="text" class="rice-name" value="Sinandomeng"></td>
+                <td><input type="number" class="sacks-bought" value="10" oninput="calculate()"></td>
+                <td><input type="number" class="cost-sack" value="2000" oninput="calculate()"></td>
+                <td><input type="number" class="sell-sack" value="2300" oninput="calculate()"></td>
+                <td><input type="number" class="sacks-sold" value="4" oninput="calculate()"></td>
+                <td class="sacks-remaining">6</td>
+                <td class="rice-revenue">9,200.00</td>
+                <td class="rice-profit">1,200.00</td>
+                <td><button class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+        </tbody>
+    </table>
 
-    <!-- GCash Transactions Tracker Section -->
-    <div class="card">
-        <h3>GCash Transactions Tracker</h3>
-        <button onclick="addNewGcashRow()" class="btn-add">+ Add Transaction</button>
-        <table id="gcashTable">
-            <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Fee</th>
-                    <th>Ref No.</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="gcashTableBody">
-                <tr>
-                    <td>
-                        <select class="gcash-type" onchange="calculateAll()">
-                            <option value="Cash In">Cash In</option>
-                            <option value="Cash Out">Cash Out</option>
-                        </select>
-                    </td>
-                    <td><input type="number" class="gcash-amount" value="500" oninput="calculateAll()"></td>
-                    <td><input type="number" class="gcash-fee" value="15" oninput="calculateAll()"></td>
-                    <td><input type="text" class="gcash-ref" value="123456789"></td>
-                    <td><button onclick="deleteGcashRow(this)" class="btn-delete">Delete</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <!-- GCash Tracker Section -->
+    <h3>GCash Transactions Tracker</h3>
+    <button class="btn" onclick="addGcashRow()">+ Add Transaction</button>
+    <br><br>
+    <table id="gcashTable">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Amount (₱)</th>
+                <th>Fee (₱)</th>
+                <th>Ref No.</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="gcashTableBody">
+            <tr>
+                <td>
+                    <select class="gcash-type">
+                        <option value="Cash In">Cash In</option>
+                        <option value="Cash Out">Cash Out</option>
+                    </select>
+                </td>
+                <td><input type="number" class="gcash-amount" value="1000" oninput="calculate()"></td>
+                <td><input type="number" class="gcash-fee" value="20" oninput="calculate()"></td>
+                <td><input type="text" class="gcash-ref" value="12345678"></td>
+                <td><button class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
+            </tr>
+        </tbody>
+    </table>
 
     <!-- Summary Section -->
-    <div class="card">
+    <div class="summary-section">
         <h3>Store Summary</h3>
-        <div class="summary-box">
-            <div class="summary-card">
-                <h4>Total Rice Revenue</h4>
-                <p id="totalRevenueDisplay">₱0.00</p>
-            </div>
-            <div class="summary-card">
-                <h4>Total Rice Net Profit</h4>
-                <p id="totalProfitDisplay">₱0.00</p>
-            </div>
-            <div class="summary-card">
-                <h4>Total GCash Fees Earned</h4>
-                <p id="totalGcashFeeDisplay">₱0.00</p>
-            </div>
-        </div>
+        <p><strong>Total Rice Revenue:</strong> ₱<span id="totalRevenue">0.00</span></p>
+        <p><strong>Total Rice Net Profit:</strong> ₱<span id="totalProfit">0.00</span></p>
+        <p><strong>Total GCash Fees Earned:</strong> ₱<span id="totalGcashFee">0.00</span></p>
     </div>
 </div>
 
 <script>
-    function addNewRiceRow() {
+    function addRiceRow() {
         const tbody = document.getElementById('riceTableBody');
-        const newRow = document.createElement('tr');
-        
-        newRow.innerHTML = `
-            <td><input type="text" class="rice-name" placeholder="Brand name" value="New Brand"></td>
-            <td><input type="number" class="sacks-bought" value="0" oninput="calculateAll()"></td>
-            <td><input type="number" class="cost-sack" value="0" oninput="calculateAll()"></td>
-            <td><input type="number" class="sell-sack" value="0" oninput="calculateAll()"></td>
-            <td><input type="number" class="sacks-sold" value="0" oninput="calculateAll()"></td>
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><input type="text" class="rice-name" value="New Brand"></td>
+            <td><input type="number" class="sacks-bought" value="0" oninput="calculate()"></td>
+            <td><input type="number" class="cost-sack" value="0" oninput="calculate()"></td>
+            <td><input type="number" class="sell-sack" value="0" oninput="calculate()"></td>
+            <td><input type="number" class="sacks-sold" value="0" oninput="calculate()"></td>
             <td class="sacks-remaining">0</td>
-            <td class="rice-revenue">₱0.00</td>
-            <td class="rice-profit">₱0.00</td>
-            <td><button onclick="deleteRiceRow(this)" class="btn-delete">Delete</button></td>
+            <td class="rice-revenue">0.00</td>
+            <td class="rice-profit">0.00</td>
+            <td><button class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
         `;
-        
-        tbody.appendChild(newRow);
-        calculateAll();
+        tbody.appendChild(row);
+        calculate();
     }
 
-    function deleteRiceRow(button) {
-        button.closest('tr').remove();
-        calculateAll();
-    }
-
-    function addNewGcashRow() {
+    function addGcashRow() {
         const tbody = document.getElementById('gcashTableBody');
-        const newRow = document.createElement('tr');
-        
-        newRow.innerHTML = `
+        const row = document.createElement('tr');
+        row.innerHTML = `
             <td>
-                <select class="gcash-type" onchange="calculateAll()">
+                <select class="gcash-type">
                     <option value="Cash In">Cash In</option>
                     <option value="Cash Out">Cash Out</option>
                 </select>
             </td>
-            <td><input type="number" class="gcash-amount" value="0" oninput="calculateAll()"></td>
-            <td><input type="number" class="gcash-fee" value="0" oninput="calculateAll()"></td>
-            <td><input type="text" class="gcash-ref" placeholder="Ref No."></td>
-            <td><button onclick="deleteGcashRow(this)" class="btn-delete">Delete</button></td>
+            <td><input type="number" class="gcash-amount" value="0" oninput="calculate()"></td>
+            <td><input type="number" class="gcash-fee" value="0" oninput="calculate()"></td>
+            <td><input type="text" class="gcash-ref" value=""></td>
+            <td><button class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
         `;
-        
-        tbody.appendChild(newRow);
-        calculateAll();
+        tbody.appendChild(row);
+        calculate();
     }
 
-    function deleteGcashRow(button) {
+    function deleteRow(button) {
         button.closest('tr').remove();
-        calculateAll();
+        calculate();
     }
 
-    function calculateAll() {
-        // Calculate Rice Inventory
-        const rows = document.querySelectorAll('#riceTableBody tr');
-        let grandTotalRevenue = 0;
-        let grandTotalProfit = 0;
+    function calculate() {
+        // Rice calculations
+        let riceRows = document.querySelectorAll('#riceTableBody tr');
+        let totalRev = 0;
+        let totalProf = 0;
 
-        rows.forEach(row => {
-            const bought = parseFloat(row.querySelector('.sacks-bought').value) || 0;
-            const cost = parseFloat(row.querySelector('.cost-sack').value) || 0;
-            const sell = parseFloat(row.querySelector('.sell-sack').value) || 0;
-            const sold = parseFloat(row.querySelector('.sacks-sold').value) || 0;
+        riceRows.forEach(row => {
+            let bought = parseFloat(row.querySelector('.sacks-bought').value) || 0;
+            let cost = parseFloat(row.querySelector('.cost-sack').value) || 0;
+            let sell = parseFloat(row.querySelector('.sell-sack').value) || 0;
+            let sold = parseFloat(row.querySelector('.sacks-sold').value) || 0;
 
-            const remaining = bought - sold;
-            const revenue = sold * sell;
-            const profit = revenue - (sold * cost);
+            let remaining = bought - sold;
+            let revenue = sold * sell;
+            let profit = revenue - (sold * cost);
 
-            grandTotalRevenue += revenue;
-            grandTotalProfit += profit;
+            totalRev += revenue;
+            totalProf += profit;
 
-            row.querySelector('.sacks-remaining').textContent = remaining;
-            row.querySelector('.rice-revenue').textContent = `₱${revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            row.querySelector('.rice-profit').textContent = `₱${profit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            row.querySelector('.sacks-remaining').innerText = remaining;
+            row.querySelector('.rice-revenue').innerText = revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            row.querySelector('.rice-profit').innerText = profit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         });
 
-        // Calculate GCash Fees
-        const gcashRows = document.querySelectorAll('#gcashTableBody tr');
-        let totalGcashFees = 0;
+        // GCash calculations
+        let gcashRows = document.querySelectorAll('#gcashTableBody tr');
+        let totalFee = 0;
 
         gcashRows.forEach(row => {
-            const fee = parseFloat(row.querySelector('.gcash-fee').value) || 0;
-            totalGcashFees += fee;
+            let fee = parseFloat(row.querySelector('.gcash-fee').value) || 0;
+            totalFee += fee;
         });
 
-        // Display Summaries
-        document.getElementById('totalRevenueDisplay').textContent = `₱${grandTotalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        document.getElementById('totalProfitDisplay').textContent = `₱${grandTotalProfit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        document.getElementById('totalGcashFeeDisplay').textContent = `₱${totalGcashFees.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('totalRevenue').innerText = totalRev.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('totalProfit').innerText = totalProf.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('totalGcashFee').innerText = totalFee.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
-    function resetAll() {
-        if(confirm("Are you sure you want to reset all tables?")) {
-            document.getElementById('riceTableBody').innerHTML = '';
-            document.getElementById('gcashTableBody').innerHTML = '';
-            addNewRiceRow();
-            addNewGcashRow();
-        }
-    }
-
-    window.onload = calculateAll;
+    window.onload = calculate;
 </script>
 
 </body>
