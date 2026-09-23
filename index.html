@@ -1,167 +1,389 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart POS & Store Tracker</title>
     <style>
+        :root {
+            --primary-green: #1b5e20;
+            --light-green-bg: #e8f5e9;
+            --accent-green: #2e7d32;
+            --table-bg: #fffdf5;
+            --border-color: #d4a373;
+            --danger-red: #c62828;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f7;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             color: #333;
         }
-        .container {
-            max-width: 1000px;
+
+        .main-container {
+            max-width: 1400px;
             margin: 0 auto;
             background: #ffffff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        h2, h3 {
-            color: #2c3e50;
+
+        /* Top Header */
+        .top-header {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 6px;
+            position: relative;
+            margin-bottom: 15px;
         }
+
+        .top-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .top-header p {
+            margin: 5px 0 0 0;
+            font-size: 0.85rem;
+            color: #a5d6a7;
+        }
+
+        .lang-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: #ffffff;
+            color: var(--primary-green);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        /* Layout Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--table-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 8px 12px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Tables */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            font-size: 0.85rem;
+            background: white;
         }
+
         th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
+            border: 1px solid #e0e0e0;
+            padding: 6px 8px;
             text-align: center;
         }
+
         th {
-            background-color: #2c3e50;
-            color: white;
+            background-color: #f1f8e9;
+            color: #2e7d32;
+            font-weight: 600;
         }
+
         input[type="text"], input[type="number"], select {
-            width: 90%;
-            padding: 6px;
+            width: 100%;
+            padding: 4px;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            text-align: center;
+            font-size: 0.85rem;
         }
+
+        input.rice-name {
+            text-align: left;
+        }
+
+        /* Buttons */
         .btn {
-            padding: 8px 12px;
-            background-color: #27ae60;
+            background-color: var(--accent-green);
             color: white;
             border: none;
-            cursor: pointer;
+            padding: 6px 12px;
             border-radius: 4px;
+            cursor: pointer;
             font-weight: bold;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
         }
+
         .btn:hover {
-            background-color: #219653;
+            background-color: #1b5e20;
         }
+
         .btn-danger {
-            background-color: #e74c3c;
+            background-color: var(--danger-red);
+            padding: 4px 8px;
+            font-size: 0.75rem;
         }
+
         .btn-danger:hover {
-            background-color: #c0392b;
+            background-color: #b71c1c;
         }
-        .summary-section {
-            background: #eecfbf;
-            padding: 15px;
+
+        /* Summary & Remittance */
+        .summary-box {
+            font-size: 0.85rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .remittance-box {
+            background: #fff;
+            border: 1px solid #b0bec5;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .remittance-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .net-total-box {
+            background-color: #111;
+            color: #00ffcc;
+            padding: 12px;
+            text-align: center;
             border-radius: 6px;
-            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
         }
+
+        .status-profit { color: #2e7d32; font-weight: bold; }
+        .status-loss { color: #c62828; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Smart POS & Store Tracker</h2>
+<div class="main-container">
+    <!-- Top Header -->
+    <div class="top-header">
+        <h1>🌾 SMART POS & STORE TRACKER 🌾</h1>
+        <p>Capital Recovery Mode • Auto SMS Listener Connected</p>
+        <button class="lang-btn">Switch to English</button>
+    </div>
 
-    <!-- Rice Inventory Section -->
-    <h3>Rice Inventory & Sales</h3>
-    <button class="btn" onclick="addRiceRow()">+ Add Rice Variety</button>
-    <br><br>
-    <table id="riceTable">
-        <thead>
-            <tr>
-                <th>Rice Variety</th>
-                <th>Sacks Bought</th>
-                <th>Cost/Sack (₱)</th>
-                <th>Sell Price/Sack (₱)</th>
-                <th>Sacks Sold</th>
-                <th>Remaining</th>
-                <th>Revenue (₱)</th>
-                <th>Profit (₱)</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="riceTableBody">
-            <tr>
-                <td><input type="text" class="rice-name" value="Sinandomeng"></td>
-                <td><input type="number" class="sacks-bought" value="10" oninput="calculate()"></td>
-                <td><input type="number" class="cost-sack" value="2000" oninput="calculate()"></td>
-                <td><input type="number" class="sell-sack" value="2300" oninput="calculate()"></td>
-                <td><input type="number" class="sacks-sold" value="4" oninput="calculate()"></td>
-                <td class="sacks-remaining">6</td>
-                <td class="rice-revenue">9,200.00</td>
-                <td class="rice-profit">1,200.00</td>
-                <td><button class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="dashboard-grid">
+        <!-- Left Column: Bigasan Inventory -->
+        <div>
+            <div class="card">
+                <div class="card-title">🌾 Bigasan Sales & Inventory Tracker 🌾</div>
+                <button class="btn" onclick="addRiceRow()">+ Add Rice Variety</button>
+                <div style="overflow-x: auto;">
+                    <table id="riceTable">
+                        <thead>
+                            <tr>
+                                <th>Uri ng Bigas</th>
+                                <th>Bibili</th>
+                                <th>Puhunan/Sako</th>
+                                <th>Nabenta</th>
+                                <th>Presyo/Sako</th>
+                                <th>Natira</th>
+                                <th>Tot Puhunan</th>
+                                <th>Tot Benta</th>
+                                <th>Profit / Loss</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="riceTableBody">
+                            <!-- Default Row -->
+                            <tr>
+                                <td><input type="text" class="rice-name" value="Sinandomeng"></td>
+                                <td><input type="number" class="sacks-bought" value="10" oninput="calculateAll()"></td>
+                                <td><input type="number" class="cost-sack" value="2000" oninput="calculateAll()"></td>
+                                <td><input type="number" class="sacks-sold" value="4" oninput="calculateAll()"></td>
+                                <td><input type="number" class="sell-sack" value="2300" oninput="calculateAll()"></td>
+                                <td class="sacks-remaining">6</td>
+                                <td class="tot-puhunan">₱20,000.00</td>
+                                <td class="tot-benta">₱9,200.00</td>
+                                <td class="profit-loss">-₱800.00</td>
+                                <td><span class="status-loss">LOSS</span></td>
+                                <td><button class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-    <!-- GCash Tracker Section -->
-    <h3>GCash Transactions Tracker</h3>
-    <button class="btn" onclick="addGcashRow()">+ Add Transaction</button>
-    <br><br>
-    <table id="gcashTable">
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th>Amount (₱)</th>
-                <th>Fee (₱)</th>
-                <th>Ref No.</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="gcashTableBody">
-            <tr>
-                <td>
-                    <select class="gcash-type">
-                        <option value="Cash In">Cash In</option>
-                        <option value="Cash Out">Cash Out</option>
-                    </select>
-                </td>
-                <td><input type="number" class="gcash-amount" value="1000" oninput="calculate()"></td>
-                <td><input type="number" class="gcash-fee" value="20" oninput="calculate()"></td>
-                <td><input type="text" class="gcash-ref" value="12345678"></td>
-                <td><button class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
-            </tr>
-        </tbody>
-    </table>
+            <!-- Summary ng Bigasan (Capital Recovery Method) -->
+            <div class="card summary-box">
+                <div class="card-title">📊 Summary ng Bigasan (Capital Recovery Method):</div>
+                <div class="summary-row">
+                    <span>Kabuuang Inilabas na Puhunan (Lahat ng Binit):</span>
+                    <strong id="sumTotalPuhunan">₱20,000.00</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Kabuuang Pumasok na Benta:</span>
+                    <strong id="sumTotalBenta">₱9,200.00</strong>
+                </div>
+                <div class="summary-row" style="border-bottom: none; font-size: 0.95rem; margin-top: 5px;">
+                    <span><strong>Net Cash Flow (Profit / Loss):</strong></span>
+                    <strong id="sumNetCashFlow" class="status-loss">-₱10,800.00</strong>
+                </div>
+            </div>
+        </div>
 
-    <!-- Summary Section -->
-    <div class="summary-section">
-        <h3>Store Summary</h3>
-        <p><strong>Total Rice Revenue:</strong> ₱<span id="totalRevenue">0.00</span></p>
-        <p><strong>Total Rice Net Profit:</strong> ₱<span id="totalProfit">0.00</span></p>
-        <p><strong>Total GCash Fees Earned:</strong> ₱<span id="totalGcashFee">0.00</span></p>
+        <!-- Right Column: Expenses, GCash & Remittance -->
+        <div>
+            <!-- Expense Tracker -->
+            <div class="card">
+                <div class="card-title">🧾 Expense Tracker (Gastusin sa Tindahan)</div>
+                <div style="display: flex; gap: 5px; margin-bottom: 8px;">
+                    <input type="text" id="expenseName" placeholder="Pangalan ng Gastusin (Hal. Kuryente)" style="flex: 2;">
+                    <input type="number" id="expenseAmount" placeholder="Amount" style="flex: 1;" oninput="calculateAll()">
+                    <button class="btn" onclick="addExpense()" style="margin:0;">+ Add</button>
+                </div>
+                <div id="expenseList" style="font-size: 0.8rem; margin-bottom: 8px; max-height: 80px; overflow-y: auto;">
+                    <!-- Dynamic expenses -->
+                </div>
+                <div style="text-align: right; font-weight: bold; font-size: 0.85rem;">
+                    Kabuuang Gastusin: <span id="totalExpenseDisplay" style="color: #c62828;">₱0.00</span>
+                </div>
+            </div>
+
+            <!-- GCash Transactions Tracker -->
+            <div class="card">
+                <div class="card-title">📱 GCash Transactions Tracker</div>
+                <button class="btn" onclick="addGcashRow()">+ Add Transaction</button>
+                <div style="overflow-x: auto;">
+                    <table id="gcashTable">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Fee</th>
+                                <th>Ref No.</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gcashTableBody">
+                            <tr>
+                                <td>
+                                    <select class="gcash-type" onchange="calculateAll()">
+                                        <option value="Cash In">Cash In</option>
+                                        <option value="Cash Out">Cash Out</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" class="gcash-amount" value="500" oninput="calculateAll()"></td>
+                                <td><input type="number" class="gcash-fee" value="15" oninput="calculateAll()"></td>
+                                <td style="width: 70px;"><input type="text" class="gcash-ref" value="12345"></td>
+                                <td><button class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 8px; font-size: 0.8rem; display: flex; justify-content: space-between;">
+                    <span>Cash In Tot: <strong id="cashInTotal">₱500.00</strong></span>
+                    <span>Cash Out Tot: <strong id="cashOutTotal">₱0.00</strong></span>
+                </div>
+                <div style="margin-top: 5px; font-size: 0.8rem; text-align: right;">
+                    Summary ng GCash Only (Kita sa Fee): <strong id="gcashFeeTotal" style="color: #2e7d32;">₱15.00</strong>
+                </div>
+            </div>
+
+            <!-- Daily Closing & Remittance -->
+            <div class="card remittance-box">
+                <div class="card-title">📥 Daily Closing & Remittance (Dapat sa Kaha)</div>
+                <div class="remittance-row">
+                    <span>Pera mula sa Benta ng Bigas:</span>
+                    <strong id="remitRiceSales">₱9,200.00</strong>
+                </div>
+                <div class="remittance-row">
+                    <span>Net Cash mula sa GCash (In/Out Flow + Fees):</span>
+                    <strong id="remitGcashNet">₱500.00</strong>
+                </div>
+                <div class="remittance-row" style="color: #c62828;">
+                    <span>Bawas Gastusin (Expenses):</span>
+                    <strong id="remitExpenses">-₱0.00</strong>
+                </div>
+                <hr style="border: 0; border-top: 1px solid #ccc; margin: 8px 0;">
+                <div class="remittance-row" style="font-size: 0.95rem;">
+                    <span><strong>KABUUANG PERA NA DAPAT SA KAHA:</strong></span>
+                    <strong id="remitTotalFinal" style="color: #2e7d32;">₱9,700.00</strong>
+                </div>
+            </div>
+
+            <!-- Overall Store Summary -->
+            <div class="net-total-box">
+                TUNAY NA KITA NG TINDAHAN (NET PROFIT)<br>
+                <span id="finalNetProfit" style="font-size: 1.3rem;">-₱10,785.00</span>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+    let expensesList = [];
+
     function addRiceRow() {
         const tbody = document.getElementById('riceTableBody');
         const row = document.createElement('tr');
         row.innerHTML = `
             <td><input type="text" class="rice-name" value="New Brand"></td>
-            <td><input type="number" class="sacks-bought" value="0" oninput="calculate()"></td>
-            <td><input type="number" class="cost-sack" value="0" oninput="calculate()"></td>
-            <td><input type="number" class="sell-sack" value="0" oninput="calculate()"></td>
-            <td><input type="number" class="sacks-sold" value="0" oninput="calculate()"></td>
+            <td><input type="number" class="sacks-bought" value="0" oninput="calculateAll()"></td>
+            <td><input type="number" class="cost-sack" value="0" oninput="calculateAll()"></td>
+            <td><input type="number" class="sacks-sold" value="0" oninput="calculateAll()"></td>
+            <td><input type="number" class="sell-sack" value="0" oninput="calculateAll()"></td>
             <td class="sacks-remaining">0</td>
-            <td class="rice-revenue">0.00</td>
-            <td class="rice-profit">0.00</td>
+            <td class="tot-puhunan">₱0.00</td>
+            <td class="tot-benta">₱0.00</td>
+            <td class="profit-loss">₱0.00</td>
+            <td><span class="status-profit">EVEN</span></td>
             <td><button class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
         `;
         tbody.appendChild(row);
-        calculate();
+        calculateAll();
     }
 
     function addGcashRow() {
@@ -169,64 +391,153 @@
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>
-                <select class="gcash-type">
+                <select class="gcash-type" onchange="calculateAll()">
                     <option value="Cash In">Cash In</option>
                     <option value="Cash Out">Cash Out</option>
                 </select>
             </td>
-            <td><input type="number" class="gcash-amount" value="0" oninput="calculate()"></td>
-            <td><input type="number" class="gcash-fee" value="0" oninput="calculate()"></td>
-            <td><input type="text" class="gcash-ref" value=""></td>
+            <td><input type="number" class="gcash-amount" value="0" oninput="calculateAll()"></td>
+            <td><input type="number" class="gcash-fee" value="0" oninput="calculateAll()"></td>
+            <td style="width: 70px;"><input type="text" class="gcash-ref" value=""></td>
             <td><button class="btn btn-danger" onclick="deleteRow(this)">Delete</button></td>
         `;
         tbody.appendChild(row);
-        calculate();
+        calculateAll();
+    }
+
+    function addExpense() {
+        const nameInput = document.getElementById('expenseName');
+        const amountInput = document.getElementById('expenseAmount');
+        const name = nameInput.value.trim();
+        const amount = parseFloat(amountInput.value) || 0;
+
+        if (name && amount > 0) {
+            expensesList.push({ name, amount });
+            nameInput.value = '';
+            amountInput.value = '';
+            renderExpenses();
+            calculateAll();
+        }
+    }
+
+    function removeExpense(index) {
+        expensesList.splice(index, 1);
+        renderExpenses();
+        calculateAll();
+    }
+
+    function renderExpenses() {
+        const container = document.getElementById('expenseList');
+        container.innerHTML = '';
+        expensesList.forEach((exp, idx) => {
+            container.innerHTML += `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 3px; align-items: center;">
+                    <span>${exp.name}: ₱${exp.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                    <button onclick="removeExpense(${idx})" style="background: #c62828; color: white; border: none; padding: 2px 5px; border-radius: 3px; cursor: pointer;">x</button>
+                </div>
+            `;
+        });
     }
 
     function deleteRow(button) {
         button.closest('tr').remove();
-        calculate();
+        calculateAll();
     }
 
-    function calculate() {
-        // Rice calculations
+    function calculateAll() {
+        // 1. Rice Inventory Calculation
         let riceRows = document.querySelectorAll('#riceTableBody tr');
-        let totalRev = 0;
-        let totalProf = 0;
+        let totalPuhunanAll = 0;
+        let totalBentaAll = 0;
+        let totalRiceProfitAll = 0;
+        let totalRiceSalesForRemit = 0;
 
         riceRows.forEach(row => {
             let bought = parseFloat(row.querySelector('.sacks-bought').value) || 0;
             let cost = parseFloat(row.querySelector('.cost-sack').value) || 0;
-            let sell = parseFloat(row.querySelector('.sell-sack').value) || 0;
             let sold = parseFloat(row.querySelector('.sacks-sold').value) || 0;
+            let sell = parseFloat(row.querySelector('.sell-sack').value) || 0;
 
             let remaining = bought - sold;
-            let revenue = sold * sell;
-            let profit = revenue - (sold * cost);
+            let totPuhunan = bought * cost;
+            let totBenta = sold * sell;
+            let profitLoss = totBenta - (sold * cost);
 
-            totalRev += revenue;
-            totalProf += profit;
+            totalPuhunanAll += totPuhunan;
+            totalBentaAll += totBenta;
+            totalRiceProfitAll += profitLoss;
+            totalRiceSalesForRemit += totBenta;
 
             row.querySelector('.sacks-remaining').innerText = remaining;
-            row.querySelector('.rice-revenue').innerText = revenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            row.querySelector('.rice-profit').innerText = profit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            row.querySelector('.tot-puhunan').innerText = `₱${totPuhunan.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            row.querySelector('.tot-benta').innerText = `₱${totBenta.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            let statusSpan = row.querySelector('span');
+            row.querySelector('.profit-loss').innerText = `${profitLoss >= 0 ? '+' : ''}₱${profitLoss.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            if (profitLoss > 0) {
+                statusSpan.className = 'status-profit';
+                statusSpan.innerText = 'PROFIT';
+            } else if (profitLoss < 0) {
+                statusSpan.className = 'status-loss';
+                statusSpan.innerText = 'LOSS';
+            } else {
+                statusSpan.className = '';
+                statusSpan.innerText = 'EVEN';
+            }
         });
 
-        // GCash calculations
+        // Update Rice Summary
+        document.getElementById('sumTotalPuhunan').innerText = `₱${totalPuhunanAll.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('sumTotalBenta').innerText = `₱${totalBentaAll.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        let netCashFlow = totalBentaAll - totalPuhunanAll;
+        let netCashElem = document.getElementById('sumNetCashFlow');
+        netCashElem.innerText = `${netCashFlow >= 0 ? '+' : ''}₱${netCashFlow.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        netCashElem.className = netCashFlow >= 0 ? 'status-profit' : 'status-loss';
+
+        // 2. GCash Calculation
         let gcashRows = document.querySelectorAll('#gcashTableBody tr');
-        let totalFee = 0;
+        let totalCashIn = 0;
+        let totalCashOut = 0;
+        let totalGcashFees = 0;
 
         gcashRows.forEach(row => {
+            let type = row.querySelector('.gcash-type').value;
+            let amount = parseFloat(row.querySelector('.gcash-amount').value) || 0;
             let fee = parseFloat(row.querySelector('.gcash-fee').value) || 0;
-            totalFee += fee;
+
+            if (type === 'Cash In') {
+                totalCashIn += amount;
+            } else {
+                totalCashOut += amount;
+            }
+            totalGcashFees += fee;
         });
 
-        document.getElementById('totalRevenue').innerText = totalRev.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        document.getElementById('totalProfit').innerText = totalProf.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        document.getElementById('totalGcashFee').innerText = totalFee.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('cashInTotal').innerText = `₱${totalCashIn.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('cashOutTotal').innerText = `₱${totalCashOut.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('gcashFeeTotal').innerText = `₱${totalGcashFees.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+        // 3. Expenses Calculation
+        let totalExpenses = expensesList.reduce((acc, item) => acc + item.amount, 0);
+        document.getElementById('totalExpenseDisplay').innerText = `₱${totalExpenses.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+        // 4. Daily Closing & Remittance Calculation
+        let gcashNetForRemit = totalCashIn - totalCashOut + totalGcashFees;
+        document.getElementById('remitRiceSales').innerText = `₱${totalRiceSalesForRemit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('remitGcashNet').innerText = `₱${gcashNetForRemit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('remitExpenses').innerText = `-₱${totalExpenses.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+        let totalRemitFinal = totalRiceSalesForRemit + gcashNetForRemit - totalExpenses;
+        document.getElementById('remitTotalFinal').innerText = `₱${totalRemitFinal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+        // 5. Overall Net Profit
+        let finalNetProfit = totalRiceProfitAll + totalGcashFees - totalExpenses;
+        let finalNetElem = document.getElementById('finalNetProfit');
+        finalNetElem.innerText = `${finalNetProfit >= 0 ? '+' : ''}₱${finalNetProfit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        finalNetElem.style.color = finalNetProfit >= 0 ? '#00ffcc' : '#ff6b6b';
     }
 
-    window.onload = calculate;
+    window.onload = calculateAll;
 </script>
 
 </body>
