@@ -679,10 +679,11 @@
         let gcashTransactions = [];
         let processedRefNos = new Set();
 
+        // Updated GCash Fee Matrix (₱1-999 = ₱10, ₱1000 = ₱20, ₱1500 = ₱30, etc.)
         function calculateAutomaticFee(amount) {
             if (amount <= 0) return 0;
-            if (amount < 1000) return 10;
-            return Math.ceil(amount / 1000) * 20;
+            if (amount <= 999) return 10;
+            return Math.ceil(amount / 500) * 10;
         }
 
         function calculateAll() {
