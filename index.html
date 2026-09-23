@@ -1,307 +1,975 @@
 <!DOCTYPE html>
-<html lang="tl">
+<html lang="tl" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart POS & Store Tracker</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title id="pageTitle">SMART POS & STORE TRACKER</title>
     <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background-color: #fcfbf7;
-            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
-            background-size: 20px 20px;
+            /* Background na may subtle rice grains pattern/texture */
+            background-color: #fcf8ec;
+            background-image: radial-gradient(#d4a373 0.75px, transparent 0.75px), radial-gradient(#d4a373 0.75px, #fcf8ec 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            color: #334155;
+            padding: 12px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #14532d, #15803d);
+            color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(20, 83, 45, 0.2);
+            text-align: center;
+            border: 1.5px solid #ca8a04;
+            position: relative;
+        }
+
+        .header-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .header-sub {
+            font-size: 0.8rem;
+            color: #fef08a;
+            margin-top: 3px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background-color: rgba(254, 240, 138, 0.2);
+            color: #fef08a;
+            font-size: 0.72rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-top: 6px;
+            font-weight: 600;
+            border: 1px solid rgba(250, 204, 21, 0.4);
+        }
+
+        .lang-toggle-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background-color: #fef08a;
+            color: #14532d;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1.45fr 0.55fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.96);
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eab308;
+            margin-bottom: 12px;
+        }
+
+        .card-bigasan {
+            background-color: #fffefb;
+            border: 2px solid #ca8a04;
+        }
+
+        .card h2.rice-header {
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-align: center;
+            color: #fef08a;
+            background: linear-gradient(135deg, #15803d, #166534);
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #eab308;
+            margin-bottom: 10px;
+        }
+
+        .card-gcash {
+            border: 1px solid #3b82f6;
+        }
+
+        .card-gcash h2.gcash-header {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            border: 2px solid #ca8a04;
+            border-radius: 8px;
+            background-color: #fffef7;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+            text-align: center;
+            min-width: 750px;
+        }
+
+        th.palay-th {
+            background: linear-gradient(180deg, #14532d, #15803d);
+            color: #fef08a;
+            padding: 9px 4px;
+            border-bottom: 2px solid #ca8a04;
+            font-weight: 700;
+            white-space: nowrap;
+            font-size: 0.76rem;
+        }
+
+        .gcash-table th {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border-bottom: 1px solid #bfdbfe;
+            padding: 6px 4px;
+        }
+
+        td {
+            padding: 5px 2px;
+            border-bottom: 1px solid #fef08a;
+        }
+
+        #riceTableBody tr:nth-child(even) { background-color: #fffbeb; }
+        #riceTableBody tr:hover { background-color: #fef3c7; }
+
+        input[type="number"], select, input[type="text"] {
+            width: 100%;
+            padding: 4px 5px;
+            border: 1px solid #d97706;
+            border-radius: 5px;
+            text-align: right;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1e293b;
+            background-color: #ffffff;
+        }
+
+        input.rice-name-input {
+            text-align: left;
+        }
+
+        input[type="number"]:focus, select:focus, input[type="text"]:focus {
+            border-color: #16a34a;
+            outline: none;
+            background-color: #f0fdf4;
+        }
+
+        .status-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+        .tag-profit { background-color: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+        .tag-loss { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+        .tag-even { background-color: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
+
+        .badge-positive { color: #15803d; font-weight: 700; }
+        .badge-negative { color: #dc2626; font-weight: 700; }
+        .badge-neutral { color: #64748b; font-weight: 600; }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 7px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary { background-color: #2563eb; color: white; }
+        .btn-secondary { background-color: #15803d; color: white; border: 1px solid #ca8a04; }
+        .btn-gcash-download { background-color: #2563eb; color: white; }
+        .btn-danger { background-color: #ef4444; color: white; }
+        .btn-dark { background-color: #334155; color: white; }
+        .btn-add-rice { background-color: #16a34a; color: white; margin-bottom: 8px; }
+
+        .summary-box {
+            background: #fffbeb;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.82rem;
+            border: 1.5px solid #fde047;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            color: #475569;
+        }
+
+        .summary-row.total {
+            border-top: 1px solid #fde047;
+            padding-top: 5px;
+            font-weight: 700;
+            font-size: 0.88rem;
+        }
+
+        .gcash-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .stat-box-gcash {
+            background-color: #f8fafc;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-box-gcash h4 {
+            font-size: 0.7rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .stat-box-gcash p {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 2px;
+        }
+
+        .summary-split-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .summary-card-rice {
+            background: #f0fdf4;
+            border: 1.5px solid #86efac;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-card-rice h4 {
+            font-size: 0.7rem;
+            color: #166534;
+            text-transform: uppercase;
+        }
+
+        .summary-card-rice .val {
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        .summary-card-gcash {
+            background: #eff6ff;
+            border: 1.5px solid #93c5fd;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-card-gcash h4 {
+            font-size: 0.7rem;
+            color: #1e40af;
+            text-transform: uppercase;
+        }
+
+        .summary-card-gcash .val {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-top: 4px;
+        }
+
+        .overall-box {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            padding: 14px 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+            text-align: center;
+            border: 1.5px solid #eab308;
+        }
+
+        .overall-box h3 {
+            font-size: 0.75rem;
+            color: #fef08a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .overall-box .profit-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #34d399;
+            margin-top: 2px;
         }
     </style>
 </head>
-<body class="p-4 font-sans text-slate-800">
+<body>
 
-    <div class="max-w-[1400px] mx-auto space-y-4">
+    <header>
+        <button class="lang-toggle-btn" onclick="toggleLanguage()" id="langBtn">Switch to English</button>
+        <div class="header-title" id="lblHeaderTitle">🌾 SMART POS & STORE TRACKER 🌾</div>
+        <div class="header-sub" id="lblHeaderSub">Capital Recovery Mode - Auto SMS Listener Connected</div>
+        <div class="status-badge" id="smsStatusBadge">📱 Node.js Server: Waiting for SMS...</div>
+    </header>
+
+    <div class="container">
         
-        <!-- HEADER -->
-        <div class="bg-[#1e6b36] border-2 border-[#154d25] text-white p-3 rounded-xl shadow-md flex justify-between items-center">
-            <div class="flex-1 text-center">
-                <h1 class="text-xl font-extrabold tracking-wide">🌾 SMART POS & STORE TRACKER 🌾</h1>
-                <p class="text-xs text-emerald-200">Cloud Sync & Low Stock Alert Connected</p>
-                <div class="inline-block bg-[#154d25] text-emerald-100 text-[11px] px-3 py-0.5 rounded-full mt-1 border border-emerald-600">
-                    ☁️ Cloud Sync: Active & Auto-Saved
+        <!-- LEFT COLUMN: RICE STORE INVENTORY -->
+        <div>
+            <div class="card card-bigasan">
+                <h2 class="rice-header" id="lblRiceHeader">🌾 Bigasan Sales & Inventory Tracker 🌾</h2>
+                
+                <button class="btn btn-add-rice" onclick="addRiceRow()" id="btnAddRice">+ Add Rice Variety</button>
+
+                <div class="table-responsive">
+                    <table id="riceTable">
+                        <thead>
+                            <tr>
+                                <th class="palay-th" id="thRiceName" style="text-align: left; padding-left: 8px; width: 130px;">Uri ng Bigas 🌾</th>
+                                <th class="palay-th" id="thBought" style="width: 45px;">Binili 🌾</th>
+                                <th class="palay-th" id="thCost" style="width: 75px;">Puhunan/Sako 🌾</th>
+                                <th class="palay-th" id="thSold" style="width: 45px;">Nabenta 🌾</th>
+                                <th class="palay-th" id="thPrice" style="width: 75px;">Presyo/Sako 🌾</th>
+                                <th class="palay-th" id="thRemaining" style="width: 35px;">Natira 🌾</th>
+                                <th class="palay-th" id="thTotCost" style="width: 75px;">Tot Puhunan 🌾</th>
+                                <th class="palay-th" id="thTotSales" style="width: 75px;">Tot Benta 🌾</th>
+                                <th class="palay-th" id="thProfitLoss" style="width: 75px;">Profit / Loss 🌾</th>
+                                <th class="palay-th" id="thStatus" style="width: 50px;">Status 🌾</th>
+                                <th class="palay-th" id="thAction" style="width: 50px;">Action 🌾</th>
+                            </tr>
+                        </thead>
+                        <tbody id="riceTableBody">
+                            <!-- Dynamic rows -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="summary-box">
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 6px; font-size: 0.85rem;" id="lblRiceSummaryTitle">🌾 Summary ng Bigasan (Capital Recovery Method):</div>
+                    <div class="summary-row">
+                        <span id="lblSumCost">Kabuuang Inilabas na Puhunan (Lahat ng Binili):</span>
+                        <span id="summaryRiceCost">₱0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span id="lblSumSales">Kabuuang Pumasok na Benta:</span>
+                        <span id="summaryRiceSales">₱0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span id="lblSumNet">Net Cash Flow (Profit / Loss):</span>
+                        <span id="summaryRiceProfit" style="color: #15803d;">₱0.00</span>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="exportRiceCSV()" id="btnDownloadRice">📥 Download Rice Excel</button>
+                    <button class="btn btn-danger" onclick="clearRiceInputs()" id="btnClearRice">🧹 Clear Rice</button>
                 </div>
             </div>
-            <button onclick="toggleLanguage()" class="bg-[#facc15] hover:bg-yellow-400 text-slate-900 px-3 py-1 text-xs rounded-lg font-bold shadow">Tagalog</button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-            
-            <!-- LEFT / MAIN PANE (Rice & Expenses) -->
-            <div class="lg:col-span-8 space-y-4">
+        <!-- RIGHT COLUMN: GCASH & SEPARATED STORE SUMMARY -->
+        <div>
+            <div class="card card-gcash">
+                <h2 class="gcash-header" id="lblGcashHeader">📱 GCash Transactions Tracker</h2>
                 
-                <!-- RICE SALES & INVENTORY TRACKER -->
-                <div class="bg-white border-2 border-[#1e6b36] rounded-xl p-4 shadow-sm space-y-3">
-                    <div class="bg-[#1e6b36] text-white p-2 rounded-lg text-center font-bold text-sm flex justify-between items-center px-4">
-                        <span></span>
-                        <span>🌾 Rice Sales & Inventory Tracker 🌾</span>
-                        <button onclick="toggleAddRiceSection()" class="bg-[#154d25] hover:bg-emerald-800 text-white text-[11px] px-2.5 py-1 rounded border border-emerald-500 font-normal">
-                            + Add Rice Variety
-                        </button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 4px; margin-bottom: 8px;">
+                    <select id="gcType">
+                        <option value="Cash In">Cash In</option>
+                        <option value="Cash Out">Cash Out</option>
+                    </select>
+                    <input type="number" id="gcAmount" placeholder="Amount">
+                    <input type="number" id="gcFee" placeholder="Fee">
+                    <input type="text" id="gcRef" placeholder="Ref No.">
+                    <button class="btn btn-primary" onclick="manualAddGCash()" id="btnAddGcash">+ Add</button>
+                </div>
+
+                <div class="gcash-stats">
+                    <div class="stat-box-gcash">
+                        <h4 id="lblCashInVol">Cash In Vol:</h4>
+                        <p id="gcInVol">₱0.00</p>
                     </div>
-
-                    <!-- Collapsible Add Rice Form (Naka-hide para hindi kumain ng space) -->
-                    <div id="addRiceSection" class="hidden p-3 bg-emerald-50 border border-emerald-200 rounded-lg space-y-2">
-                        <div class="text-xs font-bold text-emerald-900">Magdagdag ng Bagong Uri ng Bigas (Protected)</div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                            <input type="text" id="inputRiceName" placeholder="Rice Brand Name" class="border p-1.5 text-xs rounded">
-                            <input type="number" id="inputRiceBought" placeholder="Sako Binili" class="border p-1.5 text-xs rounded">
-                            <input type="number" id="inputRiceCost" placeholder="Cost per Sack" class="border p-1.5 text-xs rounded">
-                        </div>
-                        <button onclick="confirmAddRice()" class="bg-[#1e6b36] text-white text-xs px-3 py-1 rounded font-medium">I-save ang Bigas</button>
+                    <div class="stat-box-gcash">
+                        <h4 id="lblCashOutVol">Cash Out Vol:</h4>
+                        <p id="gcOutVol">₱0.00</p>
                     </div>
-
-                    <!-- Rice Table -->
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs border-collapse">
-                            <thead>
-                                <tr class="bg-[#1e6b36] text-white">
-                                    <th class="p-2 border border-emerald-700">Rice Variety 🌾</th>
-                                    <th class="p-2 border border-emerald-700">Bought 🌾</th>
-                                    <th class="p-2 border border-emerald-700">Cost/Sack 🌾</th>
-                                    <th class="p-2 border border-emerald-700">Sold 🌾</th>
-                                    <th class="p-2 border border-emerald-700">Sell/Sack 🌾</th>
-                                    <th class="p-2 border border-emerald-700">Rem ⚠️</th>
-                                    <th class="p-2 border border-emerald-700">Tot Cost 🌾</th>
-                                    <th class="p-2 border border-emerald-700">Tot Sales 🌾</th>
-                                    <th class="p-2 border border-emerald-700">Profit / Loss 🌾</th>
-                                    <th class="p-2 border border-emerald-700">Status 🌾</th>
-                                    <th class="p-2 border border-emerald-700">Action 🌾</th>
-                                </tr>
-                            </thead>
-                            <tbody id="riceTableBody" class="divide-y divide-emerald-100">
-                                <tr class="hover:bg-emerald-50/50">
-                                    <td class="p-2 border border-emerald-100"><input type="text" value="Rice Brand Name" class="w-28 border p-1 rounded text-xs"></td>
-                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-14 border p-1 rounded text-xs"></td>
-                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-16 border p-1 rounded text-xs"></td>
-                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-14 border p-1 rounded text-xs"></td>
-                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-16 border p-1 rounded text-xs"></td>
-                                    <td class="p-2 border border-emerald-100 font-bold">0</td>
-                                    <td class="p-2 border border-emerald-100">₱0</td>
-                                    <td class="p-2 border border-emerald-100">₱0</td>
-                                    <td class="p-2 border border-emerald-100">₱0</td>
-                                    <td class="p-2 border border-emerald-100"><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold">EVEN</span></td>
-                                    <td class="p-2 border border-emerald-100"><button onclick="deleteRiceRow(this)" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px]">Delete</button></td>
-                                </tr>
-                                <tr class="hover:bg-emerald-50/50">
-                                    <td class="p-2 border border-emerald-100"><input type="text" value="Rice Brand Name" class="w-28 border p-1 rounded text-xs"></td>
-                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-14 border p-1 rounded text-xs"></td>
-                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-16 border p-1 rounded text-xs"></td>
-                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-14 border p-1 rounded text-xs"></td>
-                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-16 border p-1 rounded text-xs"></td>
-                                    <td class="p-2 border border-emerald-100 font-bold">0</td>
-                                    <td class="p-2 border border-emerald-100">₱0</td>
-                                    <td class="p-2 border border-emerald-100">₱0</td>
-                                    <td class="p-2 border border-emerald-100">₱0</td>
-                                    <td class="p-2 border border-emerald-100"><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold">EVEN</span></td>
-                                    <td class="p-2 border border-emerald-100"><button onclick="deleteRiceRow(this)" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px]">Delete</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- DAILY EXPENSES -->
-                    <div class="border border-amber-500 rounded-lg p-3 bg-amber-50/30 space-y-2">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-amber-900 text-xs">💡 Daily Expenses (Electricity, Water, Labor, etc.)</span>
-                            <button onclick="toggleExpenseSection()" class="bg-amber-600 hover:bg-amber-700 text-white text-[11px] px-2.5 py-1 rounded font-medium">
-                                + Add Expense
-                            </button>
-                        </div>
-
-                        <!-- Collapsible Expense Form -->
-                        <div id="addExpenseSection" class="hidden flex gap-2 pt-1">
-                            <input type="text" id="expenseNameInput" placeholder="Expense Name (e.g. Electricity)" class="border p-1.5 text-xs rounded flex-1">
-                            <input type="number" id="expenseAmountInput" placeholder="0" class="border p-1.5 text-xs rounded w-24">
-                            <button onclick="confirmAddExpense()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs px-3 py-1 rounded font-medium">Add</button>
-                        </div>
-
-                        <div class="flex items-center gap-2">
-                            <input type="text" value="Expense Name (e.g. Electricity)" class="border p-1.5 text-xs rounded flex-1 bg-white text-slate-400" disabled>
-                            <input type="number" value="0" class="border p-1.5 text-xs rounded w-20 bg-white" disabled>
-                            <button onclick="deleteExpenseRow(this)" class="bg-red-600 text-white px-2 py-1.5 rounded text-xs font-bold">✕</button>
-                        </div>
-
-                        <div class="flex justify-between items-center text-xs font-bold pt-1 border-t border-amber-200">
-                            <span class="text-slate-700">Total Expenses:</span>
-                            <span class="text-red-600 text-sm">₱0.00</span>
-                        </div>
-                    </div>
-
-                    <!-- RICE SUMMARY -->
-                    <div class="border border-amber-300 bg-amber-50/50 rounded-lg p-3 space-y-1 text-xs">
-                        <div class="font-bold text-amber-900 mb-1">🌾 Rice Summary (Capital Recovery Method):</div>
-                        <div class="flex justify-between text-slate-700"><span>Total Capital Outlay (All Bought):</span> <span class="font-semibold">₱0.00</span></div>
-                        <div class="flex justify-between text-slate-700"><span>Total Sales Collected:</span> <span class="font-semibold">₱0.00</span></div>
-                        <div class="flex justify-between font-bold border-t border-amber-200 pt-1 text-sm text-slate-900">
-                            <span>Net Cash Flow (Profit / Loss):</span> 
-                            <span class="text-emerald-700">₱0.00</span>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="downloadRiceExcel()" class="bg-[#1e6b36] hover:bg-emerald-800 text-white text-xs py-2 px-4 rounded-lg font-medium flex-1 shadow">📥 Download Rice Excel</button>
-                        <button onclick="clearRiceData()" class="bg-red-600 hover:bg-red-700 text-white text-xs py-2 px-4 rounded-lg font-medium shadow">🗑️ Clear Rice</button>
+                    <div class="stat-box-gcash" style="grid-column: span 2; background-color: #eff6ff; border-color: #bfdbfe;">
+                        <h4 style="color: #1d4ed8;" id="lblGcashFeeSummary">📊 Summary ng GCash Only (Kita sa Fee):</h4>
+                        <p id="gcFeeTotal" style="color: #2563eb; font-size: 1.1rem; font-weight: 800;">₱0.00</p>
                     </div>
                 </div>
 
+                <h2 style="color: #2563eb; font-size: 0.85rem; margin-top: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;" id="lblHistoryHeader">🔍 GCash History Log (Auto-Updated via SMS)</h2>
+                <div style="max-height: 120px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff;">
+                    <table class="gcash-table" style="min-width: 100%;">
+                        <thead>
+                            <tr>
+                                <th id="thTime">Oras</th>
+                                <th id="thType">Type</th>
+                                <th id="thGcAmt">Amount</th>
+                                <th id="thGcFee">Fee</th>
+                                <th id="thGcRef">Ref No.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gcLogTable">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-gcash-download" onclick="exportGCashCSV()" id="btnDownloadGcash">📥 Download GCash Excel</button>
+                </div>
             </div>
 
-            <!-- RIGHT / SIDEBAR PANE (GCash & Overall Summary) -->
-            <div class="lg:col-span-4 space-y-4">
+            <!-- OVERALL STORE SUMMARY WITH SEPARATE SECTIONS -->
+            <div class="card">
+                <h2 style="text-align: center; font-size: 1rem; color: #1e293b;" id="lblOverallHeader">📊 Overall Store Summary</h2>
                 
-                <!-- GCASH TRANSACTIONS TRACKER -->
-                <div class="bg-white border-2 border-blue-600 rounded-xl p-4 shadow-sm space-y-3">
-                    <div class="bg-blue-600 text-white p-2 rounded-lg text-center font-bold text-sm">
-                        📱 GCash Transactions Tracker
+                <div class="summary-split-grid">
+                    <div class="summary-card-rice">
+                        <h4 id="lblSplitRice">🌾 Bigasan Net Cash</h4>
+                        <div class="val" id="splitRiceVal">₱0.00</div>
                     </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <select class="border p-1.5 rounded text-xs bg-white">
-                            <option>Cash In</option>
-                            <option>Cash Out</option>
-                        </select>
-                        <input type="number" placeholder="Amoun" class="border p-1.5 rounded text-xs">
-                        <input type="number" placeholder="Fee" class="border p-1.5 rounded text-xs">
-                        <input type="text" placeholder="Ref No." class="border p-1.5 rounded text-xs">
-                    </div>
-                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 rounded-lg font-medium shadow">+ Add</button>
-
-                    <div class="grid grid-cols-2 gap-2 bg-blue-50/50 p-2.5 rounded-lg border border-blue-100 text-xs">
-                        <div>
-                            <span class="text-[10px] text-slate-500">Cash In Vol:</span>
-                            <div class="font-bold text-slate-800">₱0.00</div>
-                        </div>
-                        <div>
-                            <span class="text-[10px] text-slate-500">Cash Out Vol:</span>
-                            <div class="font-bold text-slate-800">₱0.00</div>
-                        </div>
-                    </div>
-
-                    <div class="border-t border-blue-100 pt-2 text-xs">
-                        <span class="text-slate-600">📊 Summary of GCash Only (Fee Earned):</span>
-                        <div class="text-blue-700 font-extrabold text-sm mt-0.5">₱0.00</div>
-                    </div>
-
-                    <div class="border-t border-blue-100 pt-2 space-y-1">
-                        <span class="text-xs font-bold text-slate-700">🔍 GCash History Log</span>
-                        <div class="grid grid-cols-5 text-[10px] font-bold bg-slate-100 p-1 rounded text-center">
-                            <span>Time</span>
-                            <span>Type</span>
-                            <span>Amount</span>
-                            <span>Fee</span>
-                            <span>Ref No.</span>
-                        </div>
-                    </div>
-
-                    <button onclick="downloadGcashExcel()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 rounded-lg font-medium shadow">📥 Download GCash Excel</button>
-                </div>
-
-                <!-- OVERALL STORE SUMMARY -->
-                <div class="bg-white border-2 border-slate-700 rounded-xl p-4 shadow-sm space-y-3">
-                    <div class="bg-slate-800 text-white p-2 rounded-lg text-center font-bold text-sm">
-                        📈 Overall Store Summary
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-lg text-center">
-                            <div class="text-[10px] text-emerald-800 font-bold">🌾 RICE NET CASH</div>
-                            <div class="text-emerald-700 font-extrabold text-sm mt-0.5">₱0.00</div>
-                        </div>
-                        <div class="bg-blue-50 border border-blue-200 p-2.5 rounded-lg text-center">
-                            <div class="text-[10px] text-blue-800 font-bold">📱 GCASH NET FEE</div>
-                            <div class="text-blue-700 font-extrabold text-sm mt-0.5">+₱0.00</div>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-900 text-white p-3 rounded-lg text-center space-y-0.5 shadow-inner">
-                        <span class="text-[10px] tracking-wider text-slate-300 font-bold block">TOTAL STORE PROFIT (COMBINED)</span>
-                        <div class="text-emerald-400 font-extrabold text-xl">₱0.00</div>
-                        <span class="text-[9px] text-slate-400 block">(Net of Daily Expenses)</span>
-                    </div>
-
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="printReport()" class="bg-slate-700 hover:bg-slate-800 text-white text-xs py-2 rounded-lg font-medium flex-1 shadow">🖨️ Print Report</button>
-                        <button onclick="resetAllData()" class="bg-red-600 hover:bg-red-700 text-white text-xs py-2 px-3 rounded-lg font-medium shadow">Reset All</button>
+                    <div class="summary-card-gcash">
+                        <h4 id="lblSplitGcash">📱 GCash Net Fee</h4>
+                        <div class="val" id="splitGCashVal">₱0.00</div>
                     </div>
                 </div>
 
+                <div class="overall-box">
+                    <h3 id="lblCombinedHeader">KABUUANG KITA NG TINDAHAN (COMBINED)</h3>
+                    <div class="profit-value" id="overallProfit">₱0.00</div>
+                </div>
+
+                <div class="btn-group" style="margin-top: 10px; justify-content: center;">
+                    <button class="btn btn-dark" onclick="window.print()" id="btnPrint">🖨️ Print Report</button>
+                    <button class="btn btn-danger" onclick="resetAllData()" id="btnReset">🗑️ Reset All</button>
+                </div>
             </div>
-
         </div>
+
     </div>
 
-    <!-- SCRIPT (Toggle & Password Protection) -->
     <script>
-        // Password Security Function para sa may-ari lang
-        function verifyOwnerAccess() {
-            let password = prompt("Ilagay ang Password ng May-Ari (Owner Password):");
-            if (password === "12345") { // Palitan ang '12345' kung kinakailangan
-                return true;
-            } else if (password !== null) {
-                alert("Maling password! Hindi pinahintulutan ang pagbabago.");
+        let currentLang = localStorage.getItem("pos_lang") || "tl";
+
+        const translations = {
+            tl: {
+                switchBtn: "Switch to English",
+                headerTitle: "🌾 SMART POS & STORE TRACKER 🌾",
+                headerSub: "Capital Recovery Mode - Auto SMS Listener Connected",
+                smsWaiting: "📱 Node.js Server: Waiting for SMS...",
+                riceHeader: "🌾 Bigasan Sales & Inventory Tracker 🌾",
+                addRiceBtn: "+ Add Rice Variety",
+                thName: "Uri ng Bigas 🌾",
+                thBought: "Binili 🌾",
+                thCost: "Puhunan/Sako 🌾",
+                thSold: "Nabenta 🌾",
+                thPrice: "Presyo/Sako 🌾",
+                thRem: "Natira 🌾",
+                thTotCost: "Tot Puhunan 🌾",
+                thTotSales: "Tot Benta 🌾",
+                thProfit: "Profit / Loss 🌾",
+                thStatus: "Status 🌾",
+                thAction: "Action 🌾",
+                riceSummaryTitle: "🌾 Summary ng Bigasan (Capital Recovery Method):",
+                sumCost: "Kabuuang Inilabas na Puhunan (Lahat ng Binili):",
+                sumSales: "Kabuuang Pumasok na Benta:",
+                sumNet: "Net Cash Flow (Profit / Loss):",
+                dlRice: "📥 Download Rice Excel",
+                clrRice: "🧹 Clear Rice",
+                gcashHeader: "📱 GCash Transactions Tracker",
+                addGcashBtn: "+ Add",
+                cashInVol: "Cash In Vol:",
+                cashOutVol: "Cash Out Vol:",
+                gcashFeeSum: "📊 Summary ng GCash Only (Kita sa Fee):",
+                historyHeader: "🔍 GCash History Log (Auto-Updated via SMS):",
+                thTime: "Oras",
+                thType: "Type",
+                thAmt: "Amount",
+                thFee: "Fee",
+                thRef: "Ref No.",
+                dlGcash: "📥 Download GCash Excel",
+                overallHeader: "📊 Overall Store Summary",
+                splitRice: "🌾 Bigasan Net Cash",
+                splitGcash: "📱 GCash Net Fee",
+                combinedHeader: "KABUUANG KITA NG TINDAHAN (COMBINED)",
+                printRep: "🖨️ Print Report",
+                resetAll: "🗑️ Reset All",
+                deleteBtn: "Delete",
+                placeholderName: "Pangalan ng Bigas"
+            },
+            en: {
+                switchBtn: "Tagalog",
+                headerTitle: "🌾 SMART POS & STORE TRACKER 🌾",
+                headerSub: "Capital Recovery Mode - Auto SMS Listener Connected",
+                smsWaiting: "📱 Node.js Server: Waiting for SMS...",
+                riceHeader: "🌾 Rice Sales & Inventory Tracker 🌾",
+                addRiceBtn: "+ Add Rice Variety",
+                thName: "Rice Variety 🌾",
+                thBought: "Bought 🌾",
+                thCost: "Cost/Sack 🌾",
+                thSold: "Sold 🌾",
+                thPrice: "Sell/Sack 🌾",
+                thRem: "Rem 🌾",
+                thTotCost: "Tot Cost 🌾",
+                thTotSales: "Tot Sales 🌾",
+                thProfit: "Profit / Loss 🌾",
+                thStatus: "Status 🌾",
+                thAction: "Action 🌾",
+                riceSummaryTitle: "🌾 Rice Summary (Capital Recovery Method):",
+                sumCost: "Total Capital Outlay (All Bought):",
+                sumSales: "Total Sales Collected:",
+                sumNet: "Net Cash Flow (Profit / Loss):",
+                dlRice: "📥 Download Rice Excel",
+                clrRice: "🧹 Clear Rice",
+                gcashHeader: "📱 GCash Transactions Tracker",
+                addGcashBtn: "+ Add",
+                cashInVol: "Cash In Vol:",
+                cashOutVol: "Cash Out Vol:",
+                gcashFeeSum: "📊 Summary of GCash Only (Fee Earned):",
+                historyHeader: "🔍 GCash History Log (Auto-Updated via SMS):",
+                thTime: "Time",
+                thType: "Type",
+                thAmt: "Amount",
+                thFee: "Fee",
+                thRef: "Ref No.",
+                dlGcash: "📥 Download GCash Excel",
+                overallHeader: "📊 Overall Store Summary",
+                splitRice: "🌾 Rice Net Cash",
+                splitGcash: "📱 GCash Net Fee",
+                combinedHeader: "TOTAL STORE PROFIT (COMBINED)",
+                printRep: "🖨️ Print Report",
+                resetAll: "🗑️ Reset All",
+                deleteBtn: "Delete",
+                placeholderName: "Rice Brand Name"
             }
-            return false;
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === "tl" ? "en" : "tl";
+            localStorage.setItem("pos_lang", currentLang);
+            applyLanguage();
         }
 
-        // Toggle Functions para hindi kumain ng space
-        function toggleAddRiceSection() {
-            const section = document.getElementById('addRiceSection');
-            section.classList.toggle('hidden');
+        function applyLanguage() {
+            let t = translations[currentLang];
+            document.getElementById("htmlRoot").lang = currentLang;
+            document.getElementById("langBtn").innerText = t.switchBtn;
+            document.getElementById("lblHeaderTitle").innerText = t.headerTitle;
+            document.getElementById("lblHeaderSub").innerText = t.headerSub;
+            document.getElementById("lblRiceHeader").innerText = t.riceHeader;
+            document.getElementById("btnAddRice").innerText = t.addRiceBtn;
+            
+            document.getElementById("thRiceName").innerText = t.thName;
+            document.getElementById("thBought").innerText = t.thBought;
+            document.getElementById("thCost").innerText = t.thCost;
+            document.getElementById("thSold").innerText = t.thSold;
+            document.getElementById("thPrice").innerText = t.thPrice;
+            document.getElementById("thRemaining").innerText = t.thRem;
+            document.getElementById("thTotCost").innerText = t.thTotCost;
+            document.getElementById("thTotSales").innerText = t.thTotSales;
+            document.getElementById("thProfitLoss").innerText = t.thProfit;
+            document.getElementById("thStatus").innerText = t.thStatus;
+            document.getElementById("thAction").innerText = t.thAction;
+
+            document.getElementById("lblRiceSummaryTitle").innerText = t.riceSummaryTitle;
+            document.getElementById("lblSumCost").innerText = t.sumCost;
+            document.getElementById("lblSumSales").innerText = t.sumSales;
+            document.getElementById("lblSumNet").innerText = t.sumNet;
+            document.getElementById("btnDownloadRice").innerText = t.dlRice;
+            document.getElementById("btnClearRice").innerText = t.clrRice;
+
+            document.getElementById("lblGcashHeader").innerText = t.gcashHeader;
+            document.getElementById("btnAddGcash").innerText = t.addGcashBtn;
+            document.getElementById("lblCashInVol").innerText = t.cashInVol;
+            document.getElementById("lblCashOutVol").innerText = t.cashOutVol;
+            document.getElementById("lblGcashFeeSummary").innerText = t.gcashFeeSum;
+            document.getElementById("lblHistoryHeader").innerText = t.historyHeader;
+
+            document.getElementById("thTime").innerText = t.thTime;
+            document.getElementById("thType").innerText = t.thType;
+            document.getElementById("thGcAmt").innerText = t.thAmt;
+            document.getElementById("thGcFee").innerText = t.thFee;
+            document.getElementById("thGcRef").innerText = t.thRef;
+            document.getElementById("btnDownloadGcash").innerText = t.dlGcash;
+
+            document.getElementById("lblOverallHeader").innerText = t.overallHeader;
+            document.getElementById("lblSplitRice").innerText = t.splitRice;
+            document.getElementById("lblSplitGcash").innerText = t.splitGcash;
+            document.getElementById("lblCombinedHeader").innerText = t.combinedHeader;
+            document.getElementById("btnPrint").innerText = t.printRep;
+            document.getElementById("btnReset").innerText = t.resetAll;
+
+            document.querySelectorAll(".rice-name-input").forEach(input => {
+                input.placeholder = t.placeholderName;
+            });
+            document.querySelectorAll(".delete-row-btn").forEach(btn => {
+                btn.innerText = t.deleteBtn;
+            });
         }
 
-        function toggleExpenseSection() {
-            const section = document.getElementById('addExpenseSection');
-            section.classList.toggle('hidden');
+        let gcashCashInVol = 0;
+        let gcashCashOutVol = 0;
+        let gcashTotalFees = 0;
+        let gcashTransactions = [];
+        let processedRefNos = new Set();
+
+        function loadRiceTable() {
+            let savedData = localStorage.getItem("rice_pos_data_v5");
+            let tbody = document.getElementById("riceTableBody");
+            tbody.innerHTML = "";
+
+            if (savedData) {
+                try {
+                    let listToUse = JSON.parse(savedData);
+                    if (listToUse.length > 0) {
+                        listToUse.forEach(item => {
+                            appendRiceRow(item.name || "", item.binili || 0, item.puhunan || 0, item.nabenta || 0, item.presyo || 0);
+                        });
+                    } else {
+                        appendRiceRow("", 0, 0, 0, 0);
+                    }
+                } catch(e) {
+                    appendRiceRow("", 0, 0, 0, 0);
+                }
+            } else {
+                appendRiceRow("", 0, 0, 0, 0);
+            }
+            applyLanguage();
+            calculateAll();
         }
 
-        // Protected Actions
-        function confirmAddRice() {
-            if (!verifyOwnerAccess()) return;
-            alert("Bagong bigas ay naidagdag na!");
-            toggleAddRiceSection();
+        function appendRiceRow(name, binili, puhunan, nabenta, presyo) {
+            let t = translations[currentLang];
+            let tbody = document.getElementById("riceTableBody");
+            let row = document.createElement("tr");
+            row.innerHTML = `
+                <td style="text-align: left; padding-left: 6px;"><input type="text" class="rice-name-input" value="${name}" placeholder="${t.placeholderName}" style="text-align: left; font-weight: 700;"></td>
+                <td><input type="number" class="binili" value="${binili}" min="0" oninput="calculateAll()"></td>
+                <td><input type="number" class="puhunan" value="${puhunan}" min="0" oninput="calculateAll()"></td>
+                <td><input type="number" class="nabenta" value="${nabenta}" min="0" oninput="calculateAll()"></td>
+                <td><input type="number" class="presyo" value="${presyo}" min="0" oninput="calculateAll()"></td>
+                <td class="natira">0</td>
+                <td class="tot-puhunan">₱0</td>
+                <td class="tot-benta">₱0</td>
+                <td class="profit-loss">₱0</td>
+                <td><span class="status-tag tag-even">EVEN</span></td>
+                <td><button class="btn btn-danger delete-row-btn" style="padding: 3px 6px; font-size: 0.65rem;" onclick="deleteRiceRow(this)">${t.deleteBtn}</button></td>
+            `;
+            tbody.appendChild(row);
         }
 
-        function confirmAddExpense() {
-            if (!verifyOwnerAccess()) return;
-            alert("Daily expense ay naidagdag na!");
-            toggleExpenseSection();
+        function addRiceRow() {
+            appendRiceRow("", 0, 0, 0, 0);
+            calculateAll();
         }
 
         function deleteRiceRow(btn) {
-            if (!verifyOwnerAccess()) return;
-            btn.closest('tr').remove();
+            btn.closest("tr").remove();
+            calculateAll();
         }
 
-        function deleteExpenseRow(btn) {
-            if (!verifyOwnerAccess()) return;
-            btn.closest('div.flex').remove();
+        function calculateAutomaticFee(amount) {
+            if (amount <= 0) return 0;
+            if (amount < 1000) return 10;
+            return Math.ceil(amount / 1000) * 20;
         }
 
-        function clearRiceData() {
-            if (!verifyOwnerAccess()) return;
-            if(confirm("Sigurado ka bang gusto mong i-clear ang rice records?")) {
-                document.getElementById('riceTableBody').innerHTML = '';
+        function calculateAll() {
+            let rows = document.querySelectorAll("#riceTableBody tr");
+            let totalPuhunanSum = 0;
+            let totalBentaSum = 0;
+            let totalProfitSum = 0;
+            let riceDataToSave = [];
+
+            rows.forEach((row) => {
+                let nameFull = row.querySelector(".rice-name-input").value.trim();
+                let binili = parseFloat(row.querySelector(".binili").value) || 0;
+                let puhunanPerSako = parseFloat(row.querySelector(".puhunan").value) || 0;
+                let nabenta = parseFloat(row.querySelector(".nabenta").value) || 0;
+                let presyoBentaPerSako = parseFloat(row.querySelector(".presyo").value) || 0;
+
+                let natira = binili - nabenta;
+                let totalCostFullBatch = binili * puhunanPerSako;
+                let totalSalesActual = nabenta * presyoBentaPerSako;
+                let profit = totalSalesActual - totalCostFullBatch;
+
+                row.querySelector(".natira").textContent = natira < 0 ? 0 : natira;
+                row.querySelector(".tot-puhunan").textContent = "₱" + totalCostFullBatch.toLocaleString('en-US');
+                row.querySelector(".tot-benta").textContent = "₱" + totalSalesActual.toLocaleString('en-US');
+
+                let profitCell = row.querySelector(".profit-loss");
+                let statusCell = row.cells[9]; 
+
+                if (binili > 0 && puhunanPerSako > 0) {
+                    if (profit > 0) {
+                        profitCell.textContent = "+₱" + profit.toLocaleString('en-US');
+                        profitCell.className = "profit-loss badge-positive";
+                        statusCell.innerHTML = '<span class="status-tag tag-profit">PROFIT</span>';
+                    } else if (profit < 0) {
+                        profitCell.textContent = "-₱" + Math.abs(profit).toLocaleString('en-US');
+                        profitCell.className = "profit-loss badge-negative";
+                        statusCell.innerHTML = '<span class="status-tag tag-loss">LOSS</span>';
+                    } else {
+                        profitCell.textContent = "₱0";
+                        profitCell.className = "profit-loss badge-neutral";
+                        statusCell.innerHTML = '<span class="status-tag tag-even">EVEN</span>';
+                    }
+                } else {
+                    profitCell.textContent = "₱0";
+                    profitCell.className = "profit-loss badge-neutral";
+                    statusCell.innerHTML = '<span class="status-tag tag-even">EVEN</span>';
+                }
+
+                totalPuhunanSum += totalCostFullBatch;
+                totalBentaSum += totalSalesActual;
+                totalProfitSum += profit;
+
+                riceDataToSave.push({ name: nameFull, binili, puhunan: puhunanPerSako, nabenta, presyo: presyoBentaPerSako });
+            });
+
+            document.getElementById("summaryRiceCost").textContent = "₱" + totalPuhunanSum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById("summaryRiceSales").textContent = "₱" + totalBentaSum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            
+            let riceProfitElem = document.getElementById("summaryRiceProfit");
+            if(totalProfitSum > 0) {
+                riceProfitElem.textContent = "+₱" + totalProfitSum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                riceProfitElem.style.color = "#15803d";
+            } else if(totalProfitSum < 0) {
+                riceProfitElem.textContent = "-₱" + Math.abs(totalProfitSum).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                riceProfitElem.style.color = "#dc2626";
+            } else {
+                riceProfitElem.textContent = "₱0.00";
+                riceProfitElem.style.color = "#64748b";
+            }
+
+            localStorage.setItem("rice_pos_data_v5", JSON.stringify(riceDataToSave));
+            updateOverallSummary(totalProfitSum);
+        }
+
+        function addGCashEntry(type, amount, fee, refNo) {
+            let parsedAmount = parseFloat(amount) || 0;
+            let parsedFee = parseFloat(fee);
+
+            if (isNaN(parsedFee) || parsedFee === 0) {
+                parsedFee = calculateAutomaticFee(parsedAmount);
+            }
+
+            if (type === "Cash In" || type === "CASH_IN" || type === "cashin") type = "Cash In";
+            if (type === "Cash Out" || type === "CASH_OUT" || type === "cashout") type = "Cash Out";
+
+            if (type === "Cash In") gcashCashInVol += parsedAmount;
+            if (type === "Cash Out") gcashCashOutVol += parsedAmount;
+            gcashTotalFees += parsedFee;
+
+            document.getElementById("gcInVol").textContent = "₱" + gcashCashInVol.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById("gcOutVol").textContent = "₱" + gcashCashOutVol.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById("gcFeeTotal").textContent = "₱" + gcashTotalFees.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            gcashTransactions.push({ time: timeStr, type, amount: parsedAmount, fee: parsedFee, refNo: refNo || 'N/A' });
+            localStorage.setItem("gcash_pos_data_v5", JSON.stringify(gcashTransactions));
+
+            let tbody = document.getElementById("gcLogTable");
+            let newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${timeStr}</td>
+                <td><b>${type}</b></td>
+                <td>₱${parsedAmount.toLocaleString('en-US')}</td>
+                <td style="color: #2563eb; font-weight: 700;">₱${parsedFee.toLocaleString('en-US')}</td>
+                <td><small style="color: #64748b;">${refNo || 'N/A'}</small></td>
+            `;
+            tbody.prepend(newRow);
+
+            calculateAll();
+        }
+
+        function manualAddGCash() {
+            let type = document.getElementById("gcType").value;
+            let amount = document.getElementById("gcAmount").value;
+            let fee = document.getElementById("gcFee").value;
+            let ref = document.getElementById("gcRef").value;
+
+            if(!amount) return alert("Paki-type ang Amount / Please enter amount!");
+
+            addGCashEntry(type, amount, fee, ref);
+
+            document.getElementById("gcAmount").value = "";
+            document.getElementById("gcFee").value = "";
+            document.getElementById("gcRef").value = "";
+        }
+
+        function updateOverallSummary(riceProfit) {
+            let splitRiceElem = document.getElementById("splitRiceVal");
+            if (riceProfit > 0) {
+                splitRiceElem.textContent = "+₱" + riceProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                splitRiceElem.style.color = "#15803d";
+            } else if (riceProfit < 0) {
+                splitRiceElem.textContent = "-₱" + Math.abs(riceProfit).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                splitRiceElem.style.color = "#dc2626";
+            } else {
+                splitRiceElem.textContent = "₱0.00";
+                splitRiceElem.style.color = "#64748b";
+            }
+
+            let splitGCashElem = document.getElementById("splitGCashVal");
+            splitGCashElem.textContent = "+₱" + gcashTotalFees.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            let totalNetProfitCombined = riceProfit + gcashTotalFees;
+            let overallElem = document.getElementById("overallProfit");
+            
+            if (totalNetProfitCombined > 0) {
+                overallElem.textContent = "+₱" + totalNetProfitCombined.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                overallElem.style.color = "#34d399";
+            } else if (totalNetProfitCombined < 0) {
+                overallElem.textContent = "-₱" + Math.abs(totalNetProfitCombined).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                overallElem.style.color = "#f87171";
+            } else {
+                overallElem.textContent = "₱0.00";
+                overallElem.style.color = "#94a3b8";
+            }
+        }
+
+        function listenToNodeServer() {
+            fetch('http://192.168.1.3:3000/api/gcash')
+                .then(res => res.json())
+                .then(data => {
+                    let badge = document.getElementById("smsStatusBadge");
+                    if (badge) {
+                        badge.innerText = "📱 Node.js Server: Connected (192.168.1.3)";
+                        badge.style.backgroundColor = "rgba(34, 197, 94, 0.3)";
+                    }
+                    
+                    let items = Array.isArray(data) ? data : [data];
+                    
+                    items.forEach(item => {
+                        let refNo = item.refNo || item.ref_no || item.reference;
+                        
+                        if (refNo && !processedRefNos.has(refNo)) {
+                            processedRefNos.add(refNo);
+                            let type = item.type || "Cash In";
+                            let amount = item.amount || 0;
+                            let fee = item.fee || 0;
+                            
+                            addGCashEntry(type, amount, fee, refNo);
+                        }
+                    });
+                })
+                .catch(err => {
+                    let badge = document.getElementById("smsStatusBadge");
+                    if (badge) {
+                        badge.innerText = "📱 Node.js Server: Waiting for SMS...";
+                        badge.style.backgroundColor = "rgba(234, 179, 8, 0.3)";
+                    }
+                });
+        }
+
+        setInterval(listenToNodeServer, 3000);
+
+        function clearRiceInputs() {
+            if(confirm("Sigurado ka bang lilinisin ang mga numero? / Are you sure you want to clear numbers?")) {
+                document.querySelectorAll("#riceTableBody tr").forEach(row => {
+                    row.querySelectorAll("input[type='number']").forEach(input => input.value = 0);
+                });
+                calculateAll();
             }
         }
 
         function resetAllData() {
-            if (!verifyOwnerAccess()) return;
-            if(confirm("Babala: Ire-reset nito ang buong sistema! Itutuloy ba?")) {
+            if(confirm("⚠️ Sigurado ka bang i-re-reset ang LAHAT? / Reset all data?")) {
+                localStorage.clear();
                 location.reload();
             }
         }
 
-        function downloadRiceExcel() { alert("Nagda-download ng Rice Excel..."); }
-        function downloadGcashExcel() { alert("Nagda-download ng GCash Excel..."); }
-        function printReport() { window.print(); }
-        function toggleLanguage() { alert("Language toggled."); }
+        function exportRiceCSV() {
+            let csv = "Uri ng Bigas,Binili (Sako),Puhunan/Sako,Nabenta (Sako),Presyo Benta/Sako,Natira,Total Puhunan,Total Benta,Profit/Loss,Status\n";
+            document.querySelectorAll("#riceTableBody tr").forEach(row => {
+                let name = row.querySelector(".rice-name-input").value;
+                let binili = row.querySelector(".binili").value;
+                let puhunan = row.querySelector(".puhunan").value;
+                let nabenta = row.querySelector(".nabenta").value;
+                let presyo = row.querySelector(".presyo").value;
+                let natira = row.querySelector(".natira").innerText;
+                let totPuh = row.querySelector(".tot-puhunan").innerText.replace(/[^0-9.-]+/g,"");
+                let totBen = row.querySelector(".tot-benta").innerText.replace(/[^0-9.-]+/g,"");
+                let prof = row.querySelector(".profit-loss").innerText.replace(/[^0-9.-]+/g,"");
+                let status = row.cells[9].innerText;
+
+                csv += `"${name}",${binili},${puhunan},${nabenta},${presyo},${natira},${totPuh},${totBen},${prof},${status}\n`;
+            });
+            let blob = new Blob([csv], { type: 'text/csv' });
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'Bigasan_Inventory_Report.csv');
+            a.click();
+        }
+
+        function exportGCashCSV() {
+            let csv = "Oras,Type,Amount,Fee,Ref No.\n";
+            gcashTransactions.forEach(tx => {
+                csv += `"${tx.time}","${tx.type}",${tx.amount},${tx.fee},"${tx.refNo}"\n`;
+            });
+            let blob = new Blob([csv], { type: 'text/csv' });
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'GCash_Transactions_Report.csv');
+            a.click();
+        }
+
+        window.onload = function() {
+            loadRiceTable();
+        }
     </script>
 </body>
 </html>
