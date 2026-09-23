@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tl" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMART POS & STORE TRACKER</title>
+    <title id="pageTitle">SMART POS & STORE TRACKER</title>
     <style>
         * {
             box-sizing: border-box;
@@ -27,6 +27,7 @@
             box-shadow: 0 4px 12px rgba(20, 83, 45, 0.2);
             text-align: center;
             border: 1.5px solid #ca8a04;
+            position: relative;
         }
 
         .header-title {
@@ -50,6 +51,21 @@
             margin-top: 6px;
             font-weight: 600;
             border: 1px solid rgba(250, 204, 21, 0.4);
+        }
+
+        .lang-toggle-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background-color: #fef08a;
+            color: #14532d;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .container {
@@ -333,8 +349,9 @@
 <body>
 
     <header>
-        <div class="header-title">🌾 SMART POS & STORE TRACKER 🌾</div>
-        <div class="header-sub">Capital Recovery Mode - Auto SMS Listener Connected</div>
+        <button class="lang-toggle-btn" onclick="toggleLanguage()" id="langBtn">Switch to English</button>
+        <div class="header-title" id="lblHeaderTitle">🌾 SMART POS & STORE TRACKER 🌾</div>
+        <div class="header-sub" id="lblHeaderSub">Capital Recovery Mode - Auto SMS Listener Connected</div>
         <div class="status-badge" id="smsStatusBadge">📱 Node.js Server: Waiting for SMS...</div>
     </header>
 
@@ -343,52 +360,52 @@
         <!-- LEFT COLUMN: RICE STORE INVENTORY -->
         <div>
             <div class="card card-bigasan">
-                <h2 class="rice-header">🌾 Bigasan Sales & Inventory Tracker 🌾</h2>
+                <h2 class="rice-header" id="lblRiceHeader">🌾 Bigasan Sales & Inventory Tracker 🌾</h2>
                 
-                <button class="btn btn-add-rice" onclick="addRiceRow()">+ Add Rice Variety</button>
+                <button class="btn btn-add-rice" onclick="addRiceRow()" id="btnAddRice">+ Add Rice Variety</button>
 
                 <div class="table-responsive">
                     <table id="riceTable">
                         <thead>
                             <tr>
-                                <th class="palay-th" style="text-align: left; padding-left: 8px; width: 130px;">Uri ng Bigas 🌾</th>
-                                <th class="palay-th" style="width: 45px;">Binili 🌾</th>
-                                <th class="palay-th" style="width: 75px;">Puhunan/Sako 🌾</th>
-                                <th class="palay-th" style="width: 45px;">Nabenta 🌾</th>
-                                <th class="palay-th" style="width: 75px;">Presyo/Sako 🌾</th>
-                                <th class="palay-th" style="width: 35px;">Natira 🌾</th>
-                                <th class="palay-th" style="width: 75px;">Tot Puhunan 🌾</th>
-                                <th class="palay-th" style="width: 75px;">Tot Benta 🌾</th>
-                                <th class="palay-th" style="width: 75px;">Profit / Loss 🌾</th>
-                                <th class="palay-th" style="width: 50px;">Status 🌾</th>
-                                <th class="palay-th" style="width: 50px;">Action 🌾</th>
+                                <th class="palay-th" id="thRiceName" style="text-align: left; padding-left: 8px; width: 130px;">Uri ng Bigas 🌾</th>
+                                <th class="palay-th" id="thBought" style="width: 45px;">Binili 🌾</th>
+                                <th class="palay-th" id="thCost" style="width: 75px;">Puhunan/Sako 🌾</th>
+                                <th class="palay-th" id="thSold" style="width: 45px;">Nabenta 🌾</th>
+                                <th class="palay-th" id="thPrice" style="width: 75px;">Presyo/Sako 🌾</th>
+                                <th class="palay-th" id="thRemaining" style="width: 35px;">Natira 🌾</th>
+                                <th class="palay-th" id="thTotCost" style="width: 75px;">Tot Puhunan 🌾</th>
+                                <th class="palay-th" id="thTotSales" style="width: 75px;">Tot Benta 🌾</th>
+                                <th class="palay-th" id="thProfitLoss" style="width: 75px;">Profit / Loss 🌾</th>
+                                <th class="palay-th" id="thStatus" style="width: 50px;">Status 🌾</th>
+                                <th class="palay-th" id="thAction" style="width: 50px;">Action 🌾</th>
                             </tr>
                         </thead>
                         <tbody id="riceTableBody">
-                            <!-- Initial rows will be generated via script -->
+                            <!-- Dynamic rows -->
                         </tbody>
                     </table>
                 </div>
 
                 <div class="summary-box">
-                    <div style="font-weight: 700; color: #166534; margin-bottom: 6px; font-size: 0.85rem;">🌾 Summary ng Bigasan (Capital Recovery Method):</div>
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 6px; font-size: 0.85rem;" id="lblRiceSummaryTitle">🌾 Summary ng Bigasan (Capital Recovery Method):</div>
                     <div class="summary-row">
-                        <span>Kabuuang Inilabas na Puhunan (Lahat ng Binili):</span>
+                        <span id="lblSumCost">Kabuuang Inilabas na Puhunan (Lahat ng Binili):</span>
                         <span id="summaryRiceCost">₱0.00</span>
                     </div>
                     <div class="summary-row">
-                        <span>Kabuuang Pumasok na Benta:</span>
+                        <span id="lblSumSales">Kabuuang Pumasok na Benta:</span>
                         <span id="summaryRiceSales">₱0.00</span>
                     </div>
                     <div class="summary-row total">
-                        <span>Net Cash Flow (Profit / Loss):</span>
+                        <span id="lblSumNet">Net Cash Flow (Profit / Loss):</span>
                         <span id="summaryRiceProfit" style="color: #15803d;">₱0.00</span>
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-secondary" onclick="exportRiceCSV()">📥 Download Rice Excel</button>
-                    <button class="btn btn-danger" onclick="clearRiceInputs()">🧹 Clear Rice</button>
+                    <button class="btn btn-secondary" onclick="exportRiceCSV()" id="btnDownloadRice">📥 Download Rice Excel</button>
+                    <button class="btn btn-danger" onclick="clearRiceInputs()" id="btnClearRice">🧹 Clear Rice</button>
                 </div>
             </div>
         </div>
@@ -396,7 +413,7 @@
         <!-- RIGHT COLUMN: GCASH & SEPARATED STORE SUMMARY -->
         <div>
             <div class="card card-gcash">
-                <h2 class="gcash-header">📱 GCash Transactions Tracker</h2>
+                <h2 class="gcash-header" id="lblGcashHeader">📱 GCash Transactions Tracker</h2>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 4px; margin-bottom: 8px;">
                     <select id="gcType">
@@ -406,34 +423,34 @@
                     <input type="number" id="gcAmount" placeholder="Amount">
                     <input type="number" id="gcFee" placeholder="Fee">
                     <input type="text" id="gcRef" placeholder="Ref No.">
-                    <button class="btn btn-primary" onclick="manualAddGCash()">+ Add</button>
+                    <button class="btn btn-primary" onclick="manualAddGCash()" id="btnAddGcash">+ Add</button>
                 </div>
 
                 <div class="gcash-stats">
                     <div class="stat-box-gcash">
-                        <h4>Cash In Vol:</h4>
+                        <h4 id="lblCashInVol">Cash In Vol:</h4>
                         <p id="gcInVol">₱0.00</p>
                     </div>
                     <div class="stat-box-gcash">
-                        <h4>Cash Out Vol:</h4>
+                        <h4 id="lblCashOutVol">Cash Out Vol:</h4>
                         <p id="gcOutVol">₱0.00</p>
                     </div>
                     <div class="stat-box-gcash" style="grid-column: span 2; background-color: #eff6ff; border-color: #bfdbfe;">
-                        <h4 style="color: #1d4ed8;">📊 Summary ng GCash Only (Kita sa Fee):</h4>
+                        <h4 style="color: #1d4ed8;" id="lblGcashFeeSummary">📊 Summary ng GCash Only (Kita sa Fee):</h4>
                         <p id="gcFeeTotal" style="color: #2563eb; font-size: 1.1rem; font-weight: 800;">₱0.00</p>
                     </div>
                 </div>
 
-                <h2 style="color: #2563eb; font-size: 0.85rem; margin-top: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;">🔍 GCash History Log (Auto-Updated via SMS)</h2>
+                <h2 style="color: #2563eb; font-size: 0.85rem; margin-top: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;" id="lblHistoryHeader">🔍 GCash History Log (Auto-Updated via SMS)</h2>
                 <div style="max-height: 120px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff;">
                     <table class="gcash-table" style="min-width: 100%;">
                         <thead>
                             <tr>
-                                <th>Oras</th>
-                                <th>Type</th>
-                                <th>Amount</th>
-                                <th>Fee</th>
-                                <th>Ref No.</th>
+                                <th id="thTime">Oras</th>
+                                <th id="thType">Type</th>
+                                <th id="thGcAmt">Amount</th>
+                                <th id="thGcFee">Fee</th>
+                                <th id="thGcRef">Ref No.</th>
                             </tr>
                         </thead>
                         <tbody id="gcLogTable">
@@ -442,33 +459,33 @@
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-gcash-download" onclick="exportGCashCSV()">📥 Download GCash Excel</button>
+                    <button class="btn btn-gcash-download" onclick="exportGCashCSV()" id="btnDownloadGcash">📥 Download GCash Excel</button>
                 </div>
             </div>
 
             <!-- OVERALL STORE SUMMARY WITH SEPARATE SECTIONS -->
             <div class="card">
-                <h2 style="text-align: center; font-size: 1rem; color: #1e293b;">📊 Overall Store Summary</h2>
+                <h2 style="text-align: center; font-size: 1rem; color: #1e293b;" id="lblOverallHeader">📊 Overall Store Summary</h2>
                 
                 <div class="summary-split-grid">
                     <div class="summary-card-rice">
-                        <h4>🌾 Bigasan Net Cash</h4>
+                        <h4 id="lblSplitRice">🌾 Bigasan Net Cash</h4>
                         <div class="val" id="splitRiceVal">₱0.00</div>
                     </div>
                     <div class="summary-card-gcash">
-                        <h4>📱 GCash Net Fee</h4>
+                        <h4 id="lblSplitGcash">📱 GCash Net Fee</h4>
                         <div class="val" id="splitGCashVal">₱0.00</div>
                     </div>
                 </div>
 
                 <div class="overall-box">
-                    <h3>KABUUANG KITA NG TINDAHAN (COMBINED)</h3>
+                    <h3 id="lblCombinedHeader">KABUUANG KITA NG TINDAHAN (COMBINED)</h3>
                     <div class="profit-value" id="overallProfit">₱0.00</div>
                 </div>
 
                 <div class="btn-group" style="margin-top: 10px; justify-content: center;">
-                    <button class="btn btn-dark" onclick="window.print()">🖨️ Print Report</button>
-                    <button class="btn btn-danger" onclick="resetAllData()">🗑️ Reset All</button>
+                    <button class="btn btn-dark" onclick="window.print()" id="btnPrint">🖨️ Print Report</button>
+                    <button class="btn btn-danger" onclick="resetAllData()" id="btnReset">🗑️ Reset All</button>
                 </div>
             </div>
         </div>
@@ -476,25 +493,164 @@
     </div>
 
     <script>
-        const initialRiceList = [
-            { name: "Sinandomeng", binili: 50, puhunan: 1680, nabenta: 50, presyo: 1720 },
-            { name: "Jaguar Blue (50k)", binili: 50, puhunan: 1638, nabenta: 50, presyo: 1677 },
-            { name: "Jaguar Blue (25k)", binili: 40, puhunan: 1000, nabenta: 32, presyo: 1100 },
-            { name: "Jaguar Orange (50k)", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Jaguar Orange (25k)", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Don Chito (50k)", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Don Chito (25k)", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Don Ramon (50k)", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Don Ramon (25k)", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Don Roberto (50k)", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Don Roberto (25k)", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Buko Pandan", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Coco Pandan", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Jasmine Rice", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Dinorado", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "RC-160", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 },
-            { name: "Maharlika", binili: 0, puhunan: 0, nabenta: 0, presyo: 0 }
-        ];
+        let currentLang = localStorage.getItem("pos_lang") || "tl";
+
+        const translations = {
+            tl: {
+                switchBtn: "Switch to English",
+                headerTitle: "🌾 SMART POS & STORE TRACKER 🌾",
+                headerSub: "Capital Recovery Mode - Auto SMS Listener Connected",
+                smsWaiting: "📱 Node.js Server: Waiting for SMS...",
+                riceHeader: "🌾 Bigasan Sales & Inventory Tracker 🌾",
+                addRiceBtn: "+ Add Rice Variety",
+                thName: "Uri ng Bigas 🌾",
+                thBought: "Binili 🌾",
+                thCost: "Puhunan/Sako 🌾",
+                thSold: "Nabenta 🌾",
+                thPrice: "Presyo/Sako 🌾",
+                thRem: "Natira 🌾",
+                thTotCost: "Tot Puhunan 🌾",
+                thTotSales: "Tot Benta 🌾",
+                thProfit: "Profit / Loss 🌾",
+                thStatus: "Status 🌾",
+                thAction: "Action 🌾",
+                riceSummaryTitle: "🌾 Summary ng Bigasan (Capital Recovery Method):",
+                sumCost: "Kabuuang Inilabas na Puhunan (Lahat ng Binili):",
+                sumSales: "Kabuuang Pumasok na Benta:",
+                sumNet: "Net Cash Flow (Profit / Loss):",
+                dlRice: "📥 Download Rice Excel",
+                clrRice: "🧹 Clear Rice",
+                gcashHeader: "📱 GCash Transactions Tracker",
+                addGcashBtn: "+ Add",
+                cashInVol: "Cash In Vol:",
+                cashOutVol: "Cash Out Vol:",
+                gcashFeeSum: "📊 Summary ng GCash Only (Kita sa Fee):",
+                historyHeader: "🔍 GCash History Log (Auto-Updated via SMS):",
+                thTime: "Oras",
+                thType: "Type",
+                thAmt: "Amount",
+                thFee: "Fee",
+                thRef: "Ref No.",
+                dlGcash: "📥 Download GCash Excel",
+                overallHeader: "📊 Overall Store Summary",
+                splitRice: "🌾 Bigasan Net Cash",
+                splitGcash: "📱 GCash Net Fee",
+                combinedHeader: "KABUUANG KITA NG TINDAHAN (COMBINED)",
+                printRep: "🖨️ Print Report",
+                resetAll: "🗑️ Reset All",
+                deleteBtn: "Delete",
+                placeholderName: "Pangalan ng Bigas"
+            },
+            en: {
+                switchBtn: "Tagalog",
+                headerTitle: "🌾 SMART POS & STORE TRACKER 🌾",
+                headerSub: "Capital Recovery Mode - Auto SMS Listener Connected",
+                smsWaiting: "📱 Node.js Server: Waiting for SMS...",
+                riceHeader: "🌾 Rice Sales & Inventory Tracker 🌾",
+                addRiceBtn: "+ Add Rice Variety",
+                thName: "Rice Variety 🌾",
+                thBought: "Bought 🌾",
+                thCost: "Cost/Sack 🌾",
+                thSold: "Sold 🌾",
+                thPrice: "Sell/Sack 🌾",
+                thRem: "Rem 🌾",
+                thTotCost: "Tot Cost 🌾",
+                thTotSales: "Tot Sales 🌾",
+                thProfit: "Profit / Loss 🌾",
+                thStatus: "Status 🌾",
+                thAction: "Action 🌾",
+                riceSummaryTitle: "🌾 Rice Summary (Capital Recovery Method):",
+                sumCost: "Total Capital Outlay (All Bought):",
+                sumSales: "Total Sales Collected:",
+                sumNet: "Net Cash Flow (Profit / Loss):",
+                dlRice: "📥 Download Rice Excel",
+                clrRice: "🧹 Clear Rice",
+                gcashHeader: "📱 GCash Transactions Tracker",
+                addGcashBtn: "+ Add",
+                cashInVol: "Cash In Vol:",
+                cashOutVol: "Cash Out Vol:",
+                gcashFeeSum: "📊 Summary of GCash Only (Fee Earned):",
+                historyHeader: "🔍 GCash History Log (Auto-Updated via SMS):",
+                thTime: "Time",
+                thType: "Type",
+                thAmt: "Amount",
+                thFee: "Fee",
+                thRef: "Ref No.",
+                dlGcash: "📥 Download GCash Excel",
+                overallHeader: "📊 Overall Store Summary",
+                splitRice: "🌾 Rice Net Cash",
+                splitGcash: "📱 GCash Net Fee",
+                combinedHeader: "TOTAL STORE PROFIT (COMBINED)",
+                printRep: "🖨️ Print Report",
+                resetAll: "🗑️ Reset All",
+                deleteBtn: "Delete",
+                placeholderName: "Rice Brand Name"
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === "tl" ? "en" : "tl";
+            localStorage.setItem("pos_lang", currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            let t = translations[currentLang];
+            document.getElementById("htmlRoot").lang = currentLang;
+            document.getElementById("langBtn").innerText = t.switchBtn;
+            document.getElementById("lblHeaderTitle").innerText = t.headerTitle;
+            document.getElementById("lblHeaderSub").innerText = t.headerSub;
+            document.getElementById("lblRiceHeader").innerText = t.riceHeader;
+            document.getElementById("btnAddRice").innerText = t.addRiceBtn;
+            
+            document.getElementById("thRiceName").innerText = t.thName;
+            document.getElementById("thBought").innerText = t.thBought;
+            document.getElementById("thCost").innerText = t.thCost;
+            document.getElementById("thSold").innerText = t.thSold;
+            document.getElementById("thPrice").innerText = t.thPrice;
+            document.getElementById("thRemaining").innerText = t.thRem;
+            document.getElementById("thTotCost").innerText = t.thTotCost;
+            document.getElementById("thTotSales").innerText = t.thTotSales;
+            document.getElementById("thProfitLoss").innerText = t.thProfit;
+            document.getElementById("thStatus").innerText = t.thStatus;
+            document.getElementById("thAction").innerText = t.thAction;
+
+            document.getElementById("lblRiceSummaryTitle").innerText = t.riceSummaryTitle;
+            document.getElementById("lblSumCost").innerText = t.sumCost;
+            document.getElementById("lblSumSales").innerText = t.sumSales;
+            document.getElementById("lblSumNet").innerText = t.sumNet;
+            document.getElementById("btnDownloadRice").innerText = t.dlRice;
+            document.getElementById("btnClearRice").innerText = t.clrRice;
+
+            document.getElementById("lblGcashHeader").innerText = t.gcashHeader;
+            document.getElementById("btnAddGcash").innerText = t.addGcashBtn;
+            document.getElementById("lblCashInVol").innerText = t.cashInVol;
+            document.getElementById("lblCashOutVol").innerText = t.cashOutVol;
+            document.getElementById("lblGcashFeeSummary").innerText = t.gcashFeeSum;
+            document.getElementById("lblHistoryHeader").innerText = t.historyHeader;
+
+            document.getElementById("thTime").innerText = t.thTime;
+            document.getElementById("thType").innerText = t.thType;
+            document.getElementById("thGcAmt").innerText = t.thAmt;
+            document.getElementById("thGcFee").innerText = t.thFee;
+            document.getElementById("thGcRef").innerText = t.thRef;
+            document.getElementById("btnDownloadGcash").innerText = t.dlGcash;
+
+            document.getElementById("lblOverallHeader").innerText = t.overallHeader;
+            document.getElementById("lblSplitRice").innerText = t.splitRice;
+            document.getElementById("lblSplitGcash").innerText = t.splitGcash;
+            document.getElementById("lblCombinedHeader").innerText = t.combinedHeader;
+            document.getElementById("btnPrint").innerText = t.printRep;
+            document.getElementById("btnReset").innerText = t.resetAll;
+
+            // I-update ang mga placeholder at delete buttons sa mga dynamic rows
+            document.querySelectorAll(".rice-name-input").forEach(input => {
+                input.placeholder = t.placeholderName;
+            });
+            document.querySelectorAll(".delete-row-btn").forEach(btn => {
+                btn.innerText = t.deleteBtn;
+            });
+        }
 
         let gcashCashInVol = 0;
         let gcashCashOutVol = 0;
@@ -503,27 +659,36 @@
         let processedRefNos = new Set();
 
         function loadRiceTable() {
-            let savedData = localStorage.getItem("rice_pos_data_v3");
-            let listToUse = initialRiceList;
-            if (savedData) {
-                try {
-                    listToUse = JSON.parse(savedData);
-                } catch(e) {}
-            }
-
+            let savedData = localStorage.getItem("rice_pos_data_v5");
             let tbody = document.getElementById("riceTableBody");
             tbody.innerHTML = "";
-            listToUse.forEach(item => {
-                appendRiceRow(item.name || "New Variety", item.binili || 0, item.puhunan || 0, item.nabenta || 0, item.presyo || 0);
-            });
+
+            if (savedData) {
+                try {
+                    let listToUse = JSON.parse(savedData);
+                    if (listToUse.length > 0) {
+                        listToUse.forEach(item => {
+                            appendRiceRow(item.name || "", item.binili || 0, item.puhunan || 0, item.nabenta || 0, item.presyo || 0);
+                        });
+                    } else {
+                        appendRiceRow("", 0, 0, 0, 0);
+                    }
+                } catch(e) {
+                    appendRiceRow("", 0, 0, 0, 0);
+                }
+            } else {
+                appendRiceRow("", 0, 0, 0, 0);
+            }
+            applyLanguage();
             calculateAll();
         }
 
         function appendRiceRow(name, binili, puhunan, nabenta, presyo) {
+            let t = translations[currentLang];
             let tbody = document.getElementById("riceTableBody");
             let row = document.createElement("tr");
             row.innerHTML = `
-                <td style="text-align: left; padding-left: 6px;"><input type="text" class="rice-name-input" value="🌾 ${name}" style="text-align: left; font-weight: 700;"></td>
+                <td style="text-align: left; padding-left: 6px;"><input type="text" class="rice-name-input" value="${name}" placeholder="${t.placeholderName}" style="text-align: left; font-weight: 700;"></td>
                 <td><input type="number" class="binili" value="${binili}" min="0" oninput="calculateAll()"></td>
                 <td><input type="number" class="puhunan" value="${puhunan}" min="0" oninput="calculateAll()"></td>
                 <td><input type="number" class="nabenta" value="${nabenta}" min="0" oninput="calculateAll()"></td>
@@ -533,13 +698,13 @@
                 <td class="tot-benta">₱0</td>
                 <td class="profit-loss">₱0</td>
                 <td><span class="status-tag tag-even">EVEN</span></td>
-                <td><button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.65rem;" onclick="deleteRiceRow(this)">Delete</button></td>
+                <td><button class="btn btn-danger delete-row-btn" style="padding: 3px 6px; font-size: 0.65rem;" onclick="deleteRiceRow(this)">${t.deleteBtn}</button></td>
             `;
             tbody.appendChild(row);
         }
 
         function addRiceRow() {
-            appendRiceRow("Bagong Bigas", 0, 0, 0, 0);
+            appendRiceRow("", 0, 0, 0, 0);
             calculateAll();
         }
 
@@ -559,11 +724,10 @@
             let totalPuhunanSum = 0;
             let totalBentaSum = 0;
             let totalProfitSum = 0;
-
             let riceDataToSave = [];
 
             rows.forEach((row) => {
-                let nameFull = row.querySelector(".rice-name-input").value.replace('🌾 ', '').trim();
+                let nameFull = row.querySelector(".rice-name-input").value.trim();
                 let binili = parseFloat(row.querySelector(".binili").value) || 0;
                 let puhunanPerSako = parseFloat(row.querySelector(".puhunan").value) || 0;
                 let nabenta = parseFloat(row.querySelector(".nabenta").value) || 0;
@@ -623,7 +787,7 @@
                 riceProfitElem.style.color = "#64748b";
             }
 
-            localStorage.setItem("rice_pos_data_v3", JSON.stringify(riceDataToSave));
+            localStorage.setItem("rice_pos_data_v5", JSON.stringify(riceDataToSave));
             updateOverallSummary(totalProfitSum);
         }
 
@@ -649,7 +813,7 @@
             let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             gcashTransactions.push({ time: timeStr, type, amount: parsedAmount, fee: parsedFee, refNo: refNo || 'N/A' });
-            localStorage.setItem("gcash_pos_data_v3", JSON.stringify(gcashTransactions));
+            localStorage.setItem("gcash_pos_data_v5", JSON.stringify(gcashTransactions));
 
             let tbody = document.getElementById("gcLogTable");
             let newRow = document.createElement("tr");
@@ -671,7 +835,7 @@
             let fee = document.getElementById("gcFee").value;
             let ref = document.getElementById("gcRef").value;
 
-            if(!amount) return alert("Paki-type ang Amount!");
+            if(!amount) return alert("Paki-type ang Amount / Please enter amount!");
 
             addGCashEntry(type, amount, fee, ref);
 
@@ -748,7 +912,7 @@
         setInterval(listenToNodeServer, 3000);
 
         function clearRiceInputs() {
-            if(confirm("Sigurado ka bang lilinisin ang mga numero sa Bigas?")) {
+            if(confirm("Sigurado ka bang lilinisin ang mga numero? / Are you sure you want to clear numbers?")) {
                 document.querySelectorAll("#riceTableBody tr").forEach(row => {
                     row.querySelectorAll("input[type='number']").forEach(input => input.value = 0);
                 });
@@ -757,7 +921,7 @@
         }
 
         function resetAllData() {
-            if(confirm("⚠️ Sigurado ka bang i-re-reset ang LAHAT ng benta at GCash?")) {
+            if(confirm("⚠️ Sigurado ka bang i-re-reset ang LAHAT? / Reset all data?")) {
                 localStorage.clear();
                 location.reload();
             }
@@ -766,7 +930,7 @@
         function exportRiceCSV() {
             let csv = "Uri ng Bigas,Binili (Sako),Puhunan/Sako,Nabenta (Sako),Presyo Benta/Sako,Natira,Total Puhunan,Total Benta,Profit/Loss,Status\n";
             document.querySelectorAll("#riceTableBody tr").forEach(row => {
-                let name = row.querySelector(".rice-name-input").value.replace('🌾 ', '');
+                let name = row.querySelector(".rice-name-input").value;
                 let binili = row.querySelector(".binili").value;
                 let puhunan = row.querySelector(".puhunan").value;
                 let nabenta = row.querySelector(".nabenta").value;
