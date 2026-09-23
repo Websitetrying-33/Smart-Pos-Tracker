@@ -13,7 +13,6 @@
         }
 
         body {
-            /* Background na may subtle rice grains pattern/texture */
             background-color: #fcf8ec;
             background-image: radial-gradient(#d4a373 0.75px, transparent 0.75px), radial-gradient(#d4a373 0.75px, #fcf8ec 0.75px);
             background-size: 30px 30px;
@@ -34,16 +33,8 @@
             position: relative;
         }
 
-        .header-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-
-        .header-sub {
-            font-size: 0.8rem;
-            color: #fef08a;
-            margin-top: 3px;
-        }
+        .header-title { font-size: 1.4rem; font-weight: 700; }
+        .header-sub { font-size: 0.8rem; color: #fef08a; margin-top: 3px; }
 
         .status-badge {
             display: inline-block;
@@ -79,9 +70,7 @@
         }
 
         @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
+            .container { grid-template-columns: 1fr; }
         }
 
         .card {
@@ -93,10 +82,7 @@
             margin-bottom: 12px;
         }
 
-        .card-bigasan {
-            background-color: #fffefb;
-            border: 2px solid #ca8a04;
-        }
+        .card-bigasan { background-color: #fffefb; border: 2px solid #ca8a04; }
 
         .card h2.rice-header {
             font-size: 1.25rem;
@@ -110,10 +96,7 @@
             margin-bottom: 10px;
         }
 
-        .card-gcash {
-            border: 1px solid #3b82f6;
-        }
-
+        .card-gcash { border: 1px solid #3b82f6; }
         .card-gcash h2.gcash-header {
             background: linear-gradient(135deg, #1d4ed8, #2563eb);
             color: #ffffff;
@@ -156,10 +139,7 @@
             padding: 6px 4px;
         }
 
-        td {
-            padding: 5px 2px;
-            border-bottom: 1px solid #fef08a;
-        }
+        td { padding: 5px 2px; border-bottom: 1px solid #fef08a; }
 
         #riceTableBody tr:nth-child(even) { background-color: #fffbeb; }
         #riceTableBody tr:hover { background-color: #fef3c7; }
@@ -176,10 +156,7 @@
             background-color: #ffffff;
         }
 
-        input.rice-name-input {
-            text-align: left;
-        }
-
+        input.rice-name-input { text-align: left; }
         input[type="number"]:focus, select:focus, input[type="text"]:focus {
             border-color: #16a34a;
             outline: none;
@@ -202,12 +179,20 @@
         .badge-negative { color: #dc2626; font-weight: 700; }
         .badge-neutral { color: #64748b; font-weight: 600; }
 
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
+        /* Low stock warning class */
+        .low-stock {
+            background-color: #fee2e2 !important;
+            color: #b91c1c !important;
+            font-weight: 800;
+            animation: pulseWarning 1.5s infinite;
+        }
+        @keyframes pulseWarning {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
 
+        .btn-group { display: flex; gap: 8px; margin-top: 10px; }
         .btn {
             padding: 7px 12px;
             border: none;
@@ -264,18 +249,8 @@
             border: 1px solid #e2e8f0;
         }
 
-        .stat-box-gcash h4 {
-            font-size: 0.7rem;
-            color: #64748b;
-            font-weight: 600;
-        }
-
-        .stat-box-gcash p {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-top: 2px;
-        }
+        .stat-box-gcash h4 { font-size: 0.7rem; color: #64748b; font-weight: 600; }
+        .stat-box-gcash p { font-size: 0.95rem; font-weight: 700; color: #1e293b; margin-top: 2px; }
 
         .summary-split-grid {
             display: grid;
@@ -291,18 +266,8 @@
             border-radius: 8px;
             text-align: center;
         }
-
-        .summary-card-rice h4 {
-            font-size: 0.7rem;
-            color: #166534;
-            text-transform: uppercase;
-        }
-
-        .summary-card-rice .val {
-            font-size: 1.15rem;
-            font-weight: 800;
-            margin-top: 4px;
-        }
+        .summary-card-rice h4 { font-size: 0.7rem; color: #166534; text-transform: uppercase; }
+        .summary-card-rice .val { font-size: 1.15rem; font-weight: 800; margin-top: 4px; }
 
         .summary-card-gcash {
             background: #eff6ff;
@@ -311,19 +276,8 @@
             border-radius: 8px;
             text-align: center;
         }
-
-        .summary-card-gcash h4 {
-            font-size: 0.7rem;
-            color: #1e40af;
-            text-transform: uppercase;
-        }
-
-        .summary-card-gcash .val {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #2563eb;
-            margin-top: 4px;
-        }
+        .summary-card-gcash h4 { font-size: 0.7rem; color: #1e40af; text-transform: uppercase; }
+        .summary-card-gcash .val { font-size: 1.15rem; font-weight: 800; color: #2563eb; margin-top: 4px; }
 
         .overall-box {
             background: linear-gradient(135deg, #0f172a, #1e293b);
@@ -334,34 +288,54 @@
             text-align: center;
             border: 1.5px solid #eab308;
         }
+        .overall-box h3 { font-size: 0.75rem; color: #fef08a; text-transform: uppercase; letter-spacing: 0.5px; }
+        .overall-box .profit-value { font-size: 1.6rem; font-weight: 800; color: #34d399; margin-top: 2px; }
 
-        .overall-box h3 {
-            font-size: 0.75rem;
-            color: #fef08a;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        /* Expenses Table Container */
+        .expenses-container {
+            margin-top: 10px;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px;
         }
 
-        .overall-box .profit-value {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #34d399;
-            margin-top: 2px;
+        /* Toast Notification Styling */
+        #toastMessage {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #15803d;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 10000;
+            border: 1.5px solid #fef08a;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: translateY(10px);
         }
+        #toastMessage.show { display: block; opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
 
+    <div id="toastMessage">✨ Matagumpay na na-save!</div>
+
     <header>
         <button class="lang-toggle-btn" onclick="toggleLanguage()" id="langBtn">Switch to English</button>
         <div class="header-title" id="lblHeaderTitle">🌾 SMART POS & STORE TRACKER 🌾</div>
-        <div class="header-sub" id="lblHeaderSub">Capital Recovery Mode - Auto SMS Listener Connected</div>
-        <div class="status-badge" id="smsStatusBadge">📱 Node.js Server: Waiting for SMS...</div>
+        <div class="header-sub" id="lblHeaderSub">Cloud Sync & Low Stock Alert Connected</div>
+        <div class="status-badge" id="cloudStatusBadge">☁️ Cloud Sync: Active (Local & Ready)</div>
     </header>
 
     <div class="container">
         
-        <!-- LEFT COLUMN: RICE STORE INVENTORY -->
+        <!-- LEFT COLUMN: RICE STORE INVENTORY & EXPENSES -->
         <div>
             <div class="card card-bigasan">
                 <h2 class="rice-header" id="lblRiceHeader">🌾 Bigasan Sales & Inventory Tracker 🌾</h2>
@@ -377,7 +351,7 @@
                                 <th class="palay-th" id="thCost" style="width: 75px;">Puhunan/Sako 🌾</th>
                                 <th class="palay-th" id="thSold" style="width: 45px;">Nabenta 🌾</th>
                                 <th class="palay-th" id="thPrice" style="width: 75px;">Presyo/Sako 🌾</th>
-                                <th class="palay-th" id="thRemaining" style="width: 35px;">Natira 🌾</th>
+                                <th class="palay-th" id="thRemaining" style="width: 35px;">Natira ⚠️</th>
                                 <th class="palay-th" id="thTotCost" style="width: 75px;">Tot Puhunan 🌾</th>
                                 <th class="palay-th" id="thTotSales" style="width: 75px;">Tot Benta 🌾</th>
                                 <th class="palay-th" id="thProfitLoss" style="width: 75px;">Profit / Loss 🌾</th>
@@ -385,10 +359,25 @@
                                 <th class="palay-th" id="thAction" style="width: 50px;">Action 🌾</th>
                             </tr>
                         </thead>
-                        <tbody id="riceTableBody">
-                            <!-- Dynamic rows -->
-                        </tbody>
+                        <tbody id="riceTableBody"></tbody>
                     </table>
+                </div>
+
+                <!-- DAILY EXPENSES TRACKER SECTION -->
+                <div class="expenses-container">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-size: 0.8rem; font-weight: 700; color: #b45309;" id="lblExpTitle">💸 Daily Expenses (Gastusin: Kuryente, Tubig, Kargador, etc.)</span>
+                        <button class="btn btn-primary" style="padding: 3px 8px; font-size: 0.7rem;" onclick="addExpenseRow()" id="btnAddExp">+ Add Expense</button>
+                    </div>
+                    <div style="max-height: 90px; overflow-y: auto;">
+                        <table style="width: 100%; font-size: 0.75rem;" id="expensesTable">
+                            <tbody id="expensesTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 6px; font-weight: 700; font-size: 0.8rem; color: #991b1b;">
+                        <span id="lblTotalExpLabel">Total Expenses:</span>
+                        <span id="totalExpensesVal">₱0.00</span>
+                    </div>
                 </div>
 
                 <div class="summary-box">
@@ -445,7 +434,7 @@
                     </div>
                 </div>
 
-                <h2 style="color: #2563eb; font-size: 0.85rem; margin-top: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;" id="lblHistoryHeader">🔍 GCash History Log (Auto-Updated via SMS)</h2>
+                <h2 style="color: #2563eb; font-size: 0.85rem; margin-top: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;" id="lblHistoryHeader">🔍 GCash History Log</h2>
                 <div style="max-height: 120px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff;">
                     <table class="gcash-table" style="min-width: 100%;">
                         <thead>
@@ -457,8 +446,7 @@
                                 <th id="thGcRef">Ref No.</th>
                             </tr>
                         </thead>
-                        <tbody id="gcLogTable">
-                        </tbody>
+                        <tbody id="gcLogTable"></tbody>
                     </table>
                 </div>
 
@@ -467,7 +455,7 @@
                 </div>
             </div>
 
-            <!-- OVERALL STORE SUMMARY WITH SEPARATE SECTIONS -->
+            <!-- OVERALL STORE SUMMARY -->
             <div class="card">
                 <h2 style="text-align: center; font-size: 1rem; color: #1e293b;" id="lblOverallHeader">📊 Overall Store Summary</h2>
                 
@@ -485,6 +473,7 @@
                 <div class="overall-box">
                     <h3 id="lblCombinedHeader">KABUUANG KITA NG TINDAHAN (COMBINED)</h3>
                     <div class="profit-value" id="overallProfit">₱0.00</div>
+                    <div style="font-size: 0.7rem; color: #fef08a; margin-top: 4px;" id="lblMinusExpText">(Bawas na ang Daily Expenses)</div>
                 </div>
 
                 <div class="btn-group" style="margin-top: 10px; justify-content: center;">
@@ -503,8 +492,8 @@
             tl: {
                 switchBtn: "Switch to English",
                 headerTitle: "🌾 SMART POS & STORE TRACKER 🌾",
-                headerSub: "Capital Recovery Mode - Auto SMS Listener Connected",
-                smsWaiting: "📱 Node.js Server: Waiting for SMS...",
+                headerSub: "Cloud Sync & Low Stock Alert Connected",
+                cloudActive: "☁️ Cloud Sync: Active & Auto-Saved",
                 riceHeader: "🌾 Bigasan Sales & Inventory Tracker 🌾",
                 addRiceBtn: "+ Add Rice Variety",
                 thName: "Uri ng Bigas 🌾",
@@ -512,12 +501,15 @@
                 thCost: "Puhunan/Sako 🌾",
                 thSold: "Nabenta 🌾",
                 thPrice: "Presyo/Sako 🌾",
-                thRem: "Natira 🌾",
+                thRem: "Natira ⚠️",
                 thTotCost: "Tot Puhunan 🌾",
                 thTotSales: "Tot Benta 🌾",
                 thProfit: "Profit / Loss 🌾",
                 thStatus: "Status 🌾",
                 thAction: "Action 🌾",
+                expTitle: "💸 Daily Expenses (Kuryente, Tubig, Kargador, etc.)",
+                addExpBtn: "+ Add Expense",
+                totExpLabel: "Total Expenses:",
                 riceSummaryTitle: "🌾 Summary ng Bigasan (Capital Recovery Method):",
                 sumCost: "Kabuuang Inilabas na Puhunan (Lahat ng Binili):",
                 sumSales: "Kabuuang Pumasok na Benta:",
@@ -529,7 +521,7 @@
                 cashInVol: "Cash In Vol:",
                 cashOutVol: "Cash Out Vol:",
                 gcashFeeSum: "📊 Summary ng GCash Only (Kita sa Fee):",
-                historyHeader: "🔍 GCash History Log (Auto-Updated via SMS):",
+                historyHeader: "🔍 GCash History Log",
                 thTime: "Oras",
                 thType: "Type",
                 thAmt: "Amount",
@@ -540,16 +532,23 @@
                 splitRice: "🌾 Bigasan Net Cash",
                 splitGcash: "📱 GCash Net Fee",
                 combinedHeader: "KABUUANG KITA NG TINDAHAN (COMBINED)",
+                minusExp: "(Bawas na ang Daily Expenses)",
                 printRep: "🖨️ Print Report",
                 resetAll: "🗑️ Reset All",
                 deleteBtn: "Delete",
-                placeholderName: "Pangalan ng Bigas"
+                placeholderName: "Pangalan ng Bigas",
+                placeholderExpDesc: "Pangalan ng Gastusin (hal. Kuryente)",
+                msgSaved: "✅ Matagumpay na na-save sa Cloud/Local!",
+                msgDeleted: "🗑️ Matagumpay na na-delete!",
+                msgCleared: "🧹 Nalinis na ang mga numero!",
+                msgReset: "⚠️ Na-reset na ang buong sistema!",
+                msgDownloaded: "📥 Na-download na ang Excel report!"
             },
             en: {
                 switchBtn: "Tagalog",
                 headerTitle: "🌾 SMART POS & STORE TRACKER 🌾",
-                headerSub: "Capital Recovery Mode - Auto SMS Listener Connected",
-                smsWaiting: "📱 Node.js Server: Waiting for SMS...",
+                headerSub: "Cloud Sync & Low Stock Alert Connected",
+                cloudActive: "☁️ Cloud Sync: Active & Auto-Saved",
                 riceHeader: "🌾 Rice Sales & Inventory Tracker 🌾",
                 addRiceBtn: "+ Add Rice Variety",
                 thName: "Rice Variety 🌾",
@@ -557,12 +556,15 @@
                 thCost: "Cost/Sack 🌾",
                 thSold: "Sold 🌾",
                 thPrice: "Sell/Sack 🌾",
-                thRem: "Rem 🌾",
+                thRem: "Rem ⚠️",
                 thTotCost: "Tot Cost 🌾",
                 thTotSales: "Tot Sales 🌾",
                 thProfit: "Profit / Loss 🌾",
                 thStatus: "Status 🌾",
                 thAction: "Action 🌾",
+                expTitle: "💸 Daily Expenses (Electricity, Water, Labor, etc.)",
+                addExpBtn: "+ Add Expense",
+                totExpLabel: "Total Expenses:",
                 riceSummaryTitle: "🌾 Rice Summary (Capital Recovery Method):",
                 sumCost: "Total Capital Outlay (All Bought):",
                 sumSales: "Total Sales Collected:",
@@ -574,7 +576,7 @@
                 cashInVol: "Cash In Vol:",
                 cashOutVol: "Cash Out Vol:",
                 gcashFeeSum: "📊 Summary of GCash Only (Fee Earned):",
-                historyHeader: "🔍 GCash History Log (Auto-Updated via SMS):",
+                historyHeader: "🔍 GCash History Log",
                 thTime: "Time",
                 thType: "Type",
                 thAmt: "Amount",
@@ -585,12 +587,26 @@
                 splitRice: "🌾 Rice Net Cash",
                 splitGcash: "📱 GCash Net Fee",
                 combinedHeader: "TOTAL STORE PROFIT (COMBINED)",
+                minusExp: "(Net of Daily Expenses)",
                 printRep: "🖨️ Print Report",
                 resetAll: "🗑️ Reset All",
                 deleteBtn: "Delete",
-                placeholderName: "Rice Brand Name"
+                placeholderName: "Rice Brand Name",
+                placeholderExpDesc: "Expense Name (e.g. Electricity)",
+                msgSaved: "✅ Successfully saved to Cloud/Local!",
+                msgDeleted: "🗑️ Successfully deleted!",
+                msgCleared: "🧹 Inputs cleared successfully!",
+                msgReset: "⚠️ All data has been reset!",
+                msgDownloaded: "📥 Excel report downloaded!"
             }
         };
+
+        function showToast(message) {
+            let toast = document.getElementById("toastMessage");
+            toast.innerText = message;
+            toast.classList.add("show");
+            setTimeout(() => { toast.classList.remove("show"); }, 2500);
+        }
 
         function toggleLanguage() {
             currentLang = currentLang === "tl" ? "en" : "tl";
@@ -604,6 +620,7 @@
             document.getElementById("langBtn").innerText = t.switchBtn;
             document.getElementById("lblHeaderTitle").innerText = t.headerTitle;
             document.getElementById("lblHeaderSub").innerText = t.headerSub;
+            document.getElementById("cloudStatusBadge").innerText = t.cloudActive;
             document.getElementById("lblRiceHeader").innerText = t.riceHeader;
             document.getElementById("btnAddRice").innerText = t.addRiceBtn;
             
@@ -618,6 +635,10 @@
             document.getElementById("thProfitLoss").innerText = t.thProfit;
             document.getElementById("thStatus").innerText = t.thStatus;
             document.getElementById("thAction").innerText = t.thAction;
+
+            document.getElementById("lblExpTitle").innerText = t.expTitle;
+            document.getElementById("btnAddExp").innerText = t.addExpBtn;
+            document.getElementById("lblTotalExpLabel").innerText = t.totExpLabel;
 
             document.getElementById("lblRiceSummaryTitle").innerText = t.riceSummaryTitle;
             document.getElementById("lblSumCost").innerText = t.sumCost;
@@ -644,44 +665,48 @@
             document.getElementById("lblSplitRice").innerText = t.splitRice;
             document.getElementById("lblSplitGcash").innerText = t.splitGcash;
             document.getElementById("lblCombinedHeader").innerText = t.combinedHeader;
+            document.getElementById("lblMinusExpText").innerText = t.minusExp;
             document.getElementById("btnPrint").innerText = t.printRep;
             document.getElementById("btnReset").innerText = t.resetAll;
 
-            document.querySelectorAll(".rice-name-input").forEach(input => {
-                input.placeholder = t.placeholderName;
-            });
-            document.querySelectorAll(".delete-row-btn").forEach(btn => {
-                btn.innerText = t.deleteBtn;
-            });
+            document.querySelectorAll(".rice-name-input").forEach(input => { input.placeholder = t.placeholderName; });
+            document.querySelectorAll(".exp-desc").forEach(input => { input.placeholder = t.placeholderExpDesc; });
+            document.querySelectorAll(".delete-row-btn").forEach(btn => { btn.innerText = t.deleteBtn; });
         }
 
         let gcashCashInVol = 0;
         let gcashCashOutVol = 0;
         let gcashTotalFees = 0;
         let gcashTransactions = [];
-        let processedRefNos = new Set();
 
-        function loadRiceTable() {
-            let savedData = localStorage.getItem("rice_pos_data_v5");
+        function loadAppData() {
+            // Load Rice
+            let savedRice = localStorage.getItem("rice_pos_data_v7");
             let tbody = document.getElementById("riceTableBody");
             tbody.innerHTML = "";
 
-            if (savedData) {
+            if (savedRice) {
                 try {
-                    let listToUse = JSON.parse(savedData);
-                    if (listToUse.length > 0) {
-                        listToUse.forEach(item => {
-                            appendRiceRow(item.name || "", item.binili || 0, item.puhunan || 0, item.nabenta || 0, item.presyo || 0);
-                        });
-                    } else {
-                        appendRiceRow("", 0, 0, 0, 0);
-                    }
-                } catch(e) {
-                    appendRiceRow("", 0, 0, 0, 0);
-                }
-            } else {
-                appendRiceRow("", 0, 0, 0, 0);
-            }
+                    let list = JSON.parse(savedRice);
+                    if (list.length > 0) {
+                        list.forEach(item => appendRiceRow(item.name || "", item.binili || 0, item.puhunan || 0, item.nabenta || 0, item.presyo || 0));
+                    } else { appendRiceRow("", 0, 0, 0, 0); }
+                } catch(e) { appendRiceRow("", 0, 0, 0, 0); }
+            } else { appendRiceRow("", 0, 0, 0, 0); }
+
+            // Load Expenses
+            let savedExp = localStorage.getItem("store_expenses_v7");
+            let expBody = document.getElementById("expensesTableBody");
+            expBody.innerHTML = "";
+            if (savedExp) {
+                try {
+                    let expList = JSON.parse(savedExp);
+                    if (expList.length > 0) {
+                        expList.forEach(ex => appendExpenseRow(ex.desc || "", ex.amount || 0));
+                    } else { appendExpenseRow("", 0); }
+                } catch(e) { appendExpenseRow("", 0); }
+            } else { appendExpenseRow("", 0); }
+
             applyLanguage();
             calculateAll();
         }
@@ -691,17 +716,17 @@
             let tbody = document.getElementById("riceTableBody");
             let row = document.createElement("tr");
             row.innerHTML = `
-                <td style="text-align: left; padding-left: 6px;"><input type="text" class="rice-name-input" value="${name}" placeholder="${t.placeholderName}" style="text-align: left; font-weight: 700;"></td>
+                <td style="text-align: left; padding-left: 6px;"><input type="text" class="rice-name-input" value="${name}" placeholder="${t.placeholderName}" style="text-align: left; font-weight: 700;" oninput="calculateAll()"></td>
                 <td><input type="number" class="binili" value="${binili}" min="0" oninput="calculateAll()"></td>
                 <td><input type="number" class="puhunan" value="${puhunan}" min="0" oninput="calculateAll()"></td>
                 <td><input type="number" class="nabenta" value="${nabenta}" min="0" oninput="calculateAll()"></td>
                 <td><input type="number" class="presyo" value="${presyo}" min="0" oninput="calculateAll()"></td>
-                <td class="natira">0</td>
+                <td class="natira" style="font-weight:700;">0</td>
                 <td class="tot-puhunan">₱0</td>
                 <td class="tot-benta">₱0</td>
                 <td class="profit-loss">₱0</td>
                 <td><span class="status-tag tag-even">EVEN</span></td>
-                <td><button class="btn btn-danger delete-row-btn" style="padding: 3px 6px; font-size: 0.65rem;" onclick="deleteRiceRow(this)">${t.deleteBtn}</button></td>
+                <td><button class="btn btn-danger delete-row-btn" style="padding: 3px 6px; font-size: 0.65rem;" onclick="deleteRow(this)">${t.deleteBtn}</button></td>
             `;
             tbody.appendChild(row);
         }
@@ -709,11 +734,30 @@
         function addRiceRow() {
             appendRiceRow("", 0, 0, 0, 0);
             calculateAll();
+            showToast(currentLang === 'tl' ? "✅ Naidagdag na ang bagong uri ng bigas!" : "✅ New rice variety added!");
         }
 
-        function deleteRiceRow(btn) {
+        function appendExpenseRow(desc, amount) {
+            let t = translations[currentLang];
+            let tbody = document.getElementById("expensesTableBody");
+            let row = document.createElement("tr");
+            row.innerHTML = `
+                <td><input type="text" class="exp-desc" value="${desc}" placeholder="${t.placeholderExpDesc}" style="text-align: left;" oninput="calculateAll()"></td>
+                <td style="width: 100px;"><input type="number" class="exp-amount" value="${amount}" min="0" oninput="calculateAll()"></td>
+                <td style="width: 50px;"><button class="btn btn-danger" style="padding: 2px 5px; font-size: 0.6rem;" onclick="deleteRow(this)">X</button></td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        function addExpenseRow() {
+            appendExpenseRow("", 0);
+            calculateAll();
+        }
+
+        function deleteRow(btn) {
             btn.closest("tr").remove();
             calculateAll();
+            showToast(translations[currentLang].msgDeleted);
         }
 
         function calculateAutomaticFee(amount) {
@@ -723,6 +767,7 @@
         }
 
         function calculateAll() {
+            // 1. Calculate Rice & Low Stock Alert
             let rows = document.querySelectorAll("#riceTableBody tr");
             let totalPuhunanSum = 0;
             let totalBentaSum = 0;
@@ -737,11 +782,22 @@
                 let presyoBentaPerSako = parseFloat(row.querySelector(".presyo").value) || 0;
 
                 let natira = binili - nabenta;
+                if(natira < 0) natira = 0;
+
                 let totalCostFullBatch = binili * puhunanPerSako;
                 let totalSalesActual = nabenta * presyoBentaPerSako;
                 let profit = totalSalesActual - totalCostFullBatch;
 
-                row.querySelector(".natira").textContent = natira < 0 ? 0 : natira;
+                let natiraCell = row.querySelector(".natira");
+                natiraCell.textContent = natira;
+
+                // LOW STOCK ALERT (Kapag 3 o mas mababa, magiging pula/blink)
+                if (natira <= 3 && binili > 0) {
+                    natiraCell.classList.add("low-stock");
+                } else {
+                    natiraCell.classList.remove("low-stock");
+                }
+
                 row.querySelector(".tot-puhunan").textContent = "₱" + totalCostFullBatch.toLocaleString('en-US');
                 row.querySelector(".tot-benta").textContent = "₱" + totalSalesActual.toLocaleString('en-US');
 
@@ -790,8 +846,25 @@
                 riceProfitElem.style.color = "#64748b";
             }
 
-            localStorage.setItem("rice_pos_data_v5", JSON.stringify(riceDataToSave));
-            updateOverallSummary(totalProfitSum);
+            // 2. Calculate Expenses
+            let expRows = document.querySelectorAll("#expensesTableBody tr");
+            let totalExpenses = 0;
+            let expensesDataToSave = [];
+
+            expRows.forEach(er => {
+                let desc = er.querySelector(".exp-desc").value.trim();
+                let amt = parseFloat(er.querySelector(".exp-amount").value) || 0;
+                totalExpenses += amt;
+                expensesDataToSave.push({ desc, amount: amt });
+            });
+
+            document.getElementById("totalExpensesVal").textContent = "₱" + totalExpenses.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            // Save to LocalStorage / Cloud Sync structure emulation
+            localStorage.setItem("rice_pos_data_v7", JSON.stringify(riceDataToSave));
+            localStorage.setItem("store_expenses_v7", JSON.stringify(expensesDataToSave));
+
+            updateOverallSummary(totalProfitSum, totalExpenses);
         }
 
         function addGCashEntry(type, amount, fee, refNo) {
@@ -802,8 +875,8 @@
                 parsedFee = calculateAutomaticFee(parsedAmount);
             }
 
-            if (type === "Cash In" || type === "CASH_IN" || type === "cashin") type = "Cash In";
-            if (type === "Cash Out" || type === "CASH_OUT" || type === "cashout") type = "Cash Out";
+            if (type === "Cash In" || type === "cashin") type = "Cash In";
+            if (type === "Cash Out" || type === "cashout") type = "Cash Out";
 
             if (type === "Cash In") gcashCashInVol += parsedAmount;
             if (type === "Cash Out") gcashCashOutVol += parsedAmount;
@@ -814,9 +887,8 @@
             document.getElementById("gcFeeTotal").textContent = "₱" + gcashTotalFees.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
             let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
             gcashTransactions.push({ time: timeStr, type, amount: parsedAmount, fee: parsedFee, refNo: refNo || 'N/A' });
-            localStorage.setItem("gcash_pos_data_v5", JSON.stringify(gcashTransactions));
+            localStorage.setItem("gcash_pos_data_v7", JSON.stringify(gcashTransactions));
 
             let tbody = document.getElementById("gcLogTable");
             let newRow = document.createElement("tr");
@@ -828,7 +900,6 @@
                 <td><small style="color: #64748b;">${refNo || 'N/A'}</small></td>
             `;
             tbody.prepend(newRow);
-
             calculateAll();
         }
 
@@ -838,22 +909,25 @@
             let fee = document.getElementById("gcFee").value;
             let ref = document.getElementById("gcRef").value;
 
-            if(!amount) return alert("Paki-type ang Amount / Please enter amount!");
+            if(!amount) return alert(currentLang === 'tl' ? "Paki-type ang Amount!" : "Please enter amount!");
 
             addGCashEntry(type, amount, fee, ref);
 
             document.getElementById("gcAmount").value = "";
             document.getElementById("gcFee").value = "";
             document.getElementById("gcRef").value = "";
+            showToast(translations[currentLang].msgSaved);
         }
 
-        function updateOverallSummary(riceProfit) {
+        function updateOverallSummary(riceProfit, totalExpenses) {
             let splitRiceElem = document.getElementById("splitRiceVal");
-            if (riceProfit > 0) {
-                splitRiceElem.textContent = "+₱" + riceProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            let netRiceAfterExp = riceProfit - totalExpenses;
+
+            if (netRiceAfterExp > 0) {
+                splitRiceElem.textContent = "+₱" + netRiceAfterExp.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 splitRiceElem.style.color = "#15803d";
-            } else if (riceProfit < 0) {
-                splitRiceElem.textContent = "-₱" + Math.abs(riceProfit).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            } else if (netRiceAfterExp < 0) {
+                splitRiceElem.textContent = "-₱" + Math.abs(netRiceAfterExp).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 splitRiceElem.style.color = "#dc2626";
             } else {
                 splitRiceElem.textContent = "₱0.00";
@@ -863,7 +937,8 @@
             let splitGCashElem = document.getElementById("splitGCashVal");
             splitGCashElem.textContent = "+₱" + gcashTotalFees.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
-            let totalNetProfitCombined = riceProfit + gcashTotalFees;
+            // Combined Total (Rice Net Profit minus Expenses + GCash Fees)
+            let totalNetProfitCombined = netRiceAfterExp + gcashTotalFees;
             let overallElem = document.getElementById("overallProfit");
             
             if (totalNetProfitCombined > 0) {
@@ -878,59 +953,28 @@
             }
         }
 
-        function listenToNodeServer() {
-            fetch('http://192.168.1.3:3000/api/gcash')
-                .then(res => res.json())
-                .then(data => {
-                    let badge = document.getElementById("smsStatusBadge");
-                    if (badge) {
-                        badge.innerText = "📱 Node.js Server: Connected (192.168.1.3)";
-                        badge.style.backgroundColor = "rgba(34, 197, 94, 0.3)";
-                    }
-                    
-                    let items = Array.isArray(data) ? data : [data];
-                    
-                    items.forEach(item => {
-                        let refNo = item.refNo || item.ref_no || item.reference;
-                        
-                        if (refNo && !processedRefNos.has(refNo)) {
-                            processedRefNos.add(refNo);
-                            let type = item.type || "Cash In";
-                            let amount = item.amount || 0;
-                            let fee = item.fee || 0;
-                            
-                            addGCashEntry(type, amount, fee, refNo);
-                        }
-                    });
-                })
-                .catch(err => {
-                    let badge = document.getElementById("smsStatusBadge");
-                    if (badge) {
-                        badge.innerText = "📱 Node.js Server: Waiting for SMS...";
-                        badge.style.backgroundColor = "rgba(234, 179, 8, 0.3)";
-                    }
-                });
-        }
-
-        setInterval(listenToNodeServer, 3000);
-
         function clearRiceInputs() {
-            if(confirm("Sigurado ka bang lilinisin ang mga numero? / Are you sure you want to clear numbers?")) {
+            let t = translations[currentLang];
+            if(confirm(currentLang === 'tl' ? "Sigurado ka bang lilinisin ang mga numero?" : "Are you sure you want to clear numbers?")) {
                 document.querySelectorAll("#riceTableBody tr").forEach(row => {
                     row.querySelectorAll("input[type='number']").forEach(input => input.value = 0);
                 });
                 calculateAll();
+                showToast(t.msgCleared);
             }
         }
 
         function resetAllData() {
-            if(confirm("⚠️ Sigurado ka bang i-re-reset ang LAHAT? / Reset all data?")) {
+            let t = translations[currentLang];
+            if(confirm(currentLang === 'tl' ? "⚠️ Sigurado ka bang i-re-reset ang LAHAT?" : "⚠️ Are you sure you want to reset all data?")) {
                 localStorage.clear();
-                location.reload();
+                showToast(t.msgReset);
+                setTimeout(() => location.reload(), 800);
             }
         }
 
         function exportRiceCSV() {
+            let t = translations[currentLang];
             let csv = "Uri ng Bigas,Binili (Sako),Puhunan/Sako,Nabenta (Sako),Presyo Benta/Sako,Natira,Total Puhunan,Total Benta,Profit/Loss,Status\n";
             document.querySelectorAll("#riceTableBody tr").forEach(row => {
                 let name = row.querySelector(".rice-name-input").value;
@@ -952,9 +996,11 @@
             a.setAttribute('href', url);
             a.setAttribute('download', 'Bigasan_Inventory_Report.csv');
             a.click();
+            showToast(t.msgDownloaded);
         }
 
         function exportGCashCSV() {
+            let t = translations[currentLang];
             let csv = "Oras,Type,Amount,Fee,Ref No.\n";
             gcashTransactions.forEach(tx => {
                 csv += `"${tx.time}","${tx.type}",${tx.amount},${tx.fee},"${tx.refNo}"\n`;
@@ -965,10 +1011,11 @@
             a.setAttribute('href', url);
             a.setAttribute('download', 'GCash_Transactions_Report.csv');
             a.click();
+            showToast(t.msgDownloaded);
         }
 
         window.onload = function() {
-            loadRiceTable();
+            loadAppData();
         }
     </script>
 </body>
