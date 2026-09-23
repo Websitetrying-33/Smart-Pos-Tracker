@@ -355,12 +355,32 @@
             color: #34d399;
             margin-top: 2px;
         }
+
+        /* Notification Toast Style */
+        #toastNotification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #10b981;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+        }
+        #toastNotification.show {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <!-- Language Toggle button sa loob ng Banner (Kanang Itaas) -->
         <button class="lang-toggle" onclick="toggleLanguage()" id="langToggleBtn">🌐 Switch to English</button>
 
         <div class="header-title">🌾 SMART POS & STORE TRACKER 🌾</div>
@@ -501,6 +521,9 @@
 
     </div>
 
+    <!-- Notification Toast Element -->
+    <div id="toastNotification">Data saved successfully!</div>
+
     <script>
         // Language Dictionary
         let currentLang = 'tl'; // Default Tagalog
@@ -542,7 +565,9 @@
                 cardGCashNet: "📱 GCash Net Fee",
                 combinedProfitTitle: "KABUUANG KITA NG TINDAHAN (COMBINED)",
                 btnPrint: "🖨️ Print Report",
-                btnReset: "🗑️ Reset All"
+                btnReset: "🗑️ Reset All",
+                toastSaved: "Na-save ang data!",
+                toastNewSMS: "📱 May bagong GCash SMS na natanggap!"
             },
             en: {
                 langBtn: "🌐 Lumipat sa Tagalog",
@@ -581,9 +606,20 @@
                 cardGCashNet: "📱 GCash Net Fee",
                 combinedProfitTitle: "TOTAL STORE PROFIT (COMBINED)",
                 btnPrint: "🖨️ Print Report",
-                btnReset: "🗑️ Reset All"
+                btnReset: "🗑️ Reset All",
+                toastSaved: "Data saved successfully!",
+                toastNewSMS: "📱 New GCash SMS received!"
             }
         };
+
+        function showToast(message) {
+            let toast = document.getElementById("toastNotification");
+            toast.textContent = message;
+            toast.className = "show";
+            setTimeout(() => {
+                toast.className = "";
+            }, 3000);
+        }
 
         function toggleLanguage() {
             currentLang = currentLang === 'tl' ? 'en' : 'tl';
@@ -722,7 +758,7 @@
             updateOverallSummary(totalProfitSum);
         }
 
-        function addGCashEntry(type, amount, fee, refNo) {
+        function addGCashEntry(type, amount, fee, refNo, isFromSMS = false) {
             let parsedAmount = parseFloat(amount) || 0;
             let parsedFee = parseFloat(fee);
 
@@ -758,6 +794,10 @@
             tbody.prepend(newRow);
 
             calculateAll();
+
+            if (isFromSMS) {
+                showToast(translations[currentLang].toastNewSMS);
+            }
         }
 
         function manualAddGCash() {
@@ -768,7 +808,8 @@
 
             if(!amount) return alert(currentLang === 'tl' ? "Paki-type ang Amount!" : "Please type the amount!");
 
-            addGCashEntry(type, amount, fee, ref);
+            addGCashEntry(type, amount, fee, ref, false);
+            showToast(translations[currentLang].toastSaved);
 
             document.getElementById("gcAmount").value = "";
             document.getElementById("gcFee").value = "";
@@ -827,7 +868,7 @@
                             let amount = item.amount || 0;
                             let fee = item.fee || 0;
                             
-                            addGCashEntry(type, amount, fee, refNo);
+                            addGCashEntry(type, amount, fee, refNo, true);
                         }
                     });
                 })
@@ -849,6 +890,7 @@
                     row.querySelectorAll("input").forEach(input => input.value = 0);
                 });
                 calculateAll();
+                showToast(translations[currentLang].toastSaved);
             }
         }
 
