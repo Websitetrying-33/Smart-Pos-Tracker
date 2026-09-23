@@ -226,6 +226,7 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
+            justify-content: center;
         }
 
         .btn-primary { background-color: #2563eb; color: white; }
@@ -233,6 +234,7 @@
         .btn-gcash-download { background-color: #2563eb; color: white; }
         .btn-danger { background-color: #ef4444; color: white; }
         .btn-dark { background-color: #334155; color: white; }
+        .btn-warning { background-color: #d97706; color: white; }
 
         .summary-box {
             background: #fffbeb;
@@ -439,8 +441,23 @@
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: GCASH & SEPARATED STORE SUMMARY -->
+        <!-- RIGHT COLUMN: GCASH, EXPENSES, REMITTANCE & OVERALL SUMMARY -->
         <div>
+            <!-- EXPENSE TRACKER CARD -->
+            <div class="card" style="border: 1px solid #d97706;">
+                <h2 style="background: linear-gradient(135deg, #b45309, #d97706); color: white; padding: 8px 12px; border-radius: 8px; font-size: 0.95rem; text-align: center; margin-bottom: 8px;" data-translate="expenseHeader">💸 Expense Tracker (Gastusin sa Tindahan)</h2>
+                <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 4px; margin-bottom: 6px;">
+                    <input type="text" id="expDesc" placeholder="Pangalan ng Gastusin (Hal. Kuryente)" style="text-align: left;">
+                    <input type="number" id="expAmount" placeholder="Amount" style="width: 80px;">
+                    <button class="btn btn-warning" onclick="addExpense()" data-translate="btnAddExp">+ Add</button>
+                </div>
+                <div class="summary-row">
+                    <span data-translate="lblTotalExpenses">Kabuuang Gastusin:</span>
+                    <span id="totalExpensesVal" style="color: #b45309; font-weight: 700;">₱0.00</span>
+                </div>
+            </div>
+
+            <!-- GCASH TRANSACTIONS TRACKER -->
             <div class="card card-gcash">
                 <h2 class="gcash-header" data-translate="gcashHeader">📱 GCash Transactions Tracker</h2>
                 
@@ -471,7 +488,7 @@
                 </div>
 
                 <h2 style="color: #2563eb; font-size: 0.85rem; margin-top: 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;" data-translate="gcashLogTitle">🔍 GCash History Log (Auto-Updated via SMS)</h2>
-                <div style="max-height: 120px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff;">
+                <div style="max-height: 100px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff;">
                     <table class="gcash-table" style="min-width: 100%;">
                         <thead>
                             <tr>
@@ -492,13 +509,34 @@
                 </div>
             </div>
 
+            <!-- DAILY CLOSING / REMITTANCE SUMMARY -->
+            <div class="card" style="border: 1px solid #059669; background-color: #f0fdf4;">
+                <h2 style="font-size: 0.95rem; color: #065f46; font-weight: 700; margin-bottom: 8px; text-align: center;" data-translate="remittanceHeader">🔒 Daily Closing & Remittance (Dapat sa Kaha)</h2>
+                <div class="summary-row">
+                    <span data-translate="lblCashFromRice">Pera mula sa Benta ng Bigas:</span>
+                    <span id="remitRiceSales">₱0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span data-translate="lblCashFromGCashCapital">Net Cash mula sa GCash (In/Out Flow + Fees):</span>
+                    <span id="remitGCashFlow">₱0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span data-translate="lblMinusExpenses">Bawas Gastusin (Expenses):</span>
+                    <span id="remitExpenses" style="color: #dc2626;">-₱0.00</span>
+                </div>
+                <div class="summary-row total" style="border-top: 1px solid #a7f3d0; color: #065f46;">
+                    <span data-translate="lblTotalCashInDrawer">KABUUANG PERA NA DAPAT SA KAHA:</span>
+                    <span id="totalCashInDrawer" style="font-size: 1rem; color: #047857;">₱0.00</span>
+                </div>
+            </div>
+
             <!-- OVERALL STORE SUMMARY WITH SEPARATE SECTIONS -->
             <div class="card">
                 <h2 style="text-align: center; font-size: 1rem; color: #1e293b;" data-translate="overallSummaryTitle">📊 Overall Store Summary</h2>
                 
                 <div class="summary-split-grid">
                     <div class="summary-card-rice">
-                        <h4 data-translate="cardRiceNet">🌾 Bigasan Net Cash</h4>
+                        <h4 data-translate="cardRiceNet">🌾 Bigasan Net Profit</h4>
                         <div class="val" id="splitRiceVal">₱0.00</div>
                     </div>
                     <div class="summary-card-gcash">
@@ -508,7 +546,7 @@
                 </div>
 
                 <div class="overall-box">
-                    <h3 data-translate="combinedProfitTitle">KABUUANG KITA NG TINDAHAN (COMBINED)</h3>
+                    <h3 data-translate="combinedProfitTitle">TUNAY NA KITA NG TINDAHAN (NET PROFIT)</h3>
                     <div class="profit-value" id="overallProfit">₱0.00</div>
                 </div>
 
@@ -525,8 +563,7 @@
     <div id="toastNotification">Data saved successfully!</div>
 
     <script>
-        // Language Dictionary
-        let currentLang = 'tl'; // Default Tagalog
+        let currentLang = 'tl';
         const translations = {
             tl: {
                 langBtn: "🌐 Switch to English",
@@ -548,6 +585,9 @@
                 lblNetCashFlow: "Net Cash Flow (Profit / Loss):",
                 btnExportRice: "📥 Download Rice Excel",
                 btnClearRice: "🧹 Clear Rice",
+                expenseHeader: "💸 Expense Tracker (Gastusin sa Tindahan)",
+                btnAddExp: "+ Add",
+                lblTotalExpenses: "Kabuuang Gastusin:",
                 gcashHeader: "📱 GCash Transactions Tracker",
                 btnAdd: "+ Add",
                 lblCashInVol: "Cash In Vol:",
@@ -560,10 +600,15 @@
                 thFee: "Fee",
                 thRef: "Ref No.",
                 btnExportGCash: "📥 Download GCash Excel",
+                remittanceHeader: "🔒 Daily Closing & Remittance (Dapat sa Kaha)",
+                lblCashFromRice: "Pera mula sa Benta ng Bigas:",
+                lblCashFromGCashCapital: "Net Cash mula sa GCash (In/Out Flow + Fees):",
+                lblMinusExpenses: "Bawas Gastusin (Expenses):",
+                lblTotalCashInDrawer: "KABUUANG PERA NA DAPAT SA KAHA:",
                 overallSummaryTitle: "📊 Overall Store Summary",
-                cardRiceNet: "🌾 Bigasan Net Cash",
+                cardRiceNet: "🌾 Bigasan Net Profit",
                 cardGCashNet: "📱 GCash Net Fee",
-                combinedProfitTitle: "KABUUANG KITA NG TINDAHAN (COMBINED)",
+                combinedProfitTitle: "TUNAY NA KITA NG TINDAHAN (NET PROFIT)",
                 btnPrint: "🖨️ Print Report",
                 btnReset: "🗑️ Reset All",
                 toastSaved: "Na-save ang data!",
@@ -589,6 +634,9 @@
                 lblNetCashFlow: "Net Cash Flow (Profit / Loss):",
                 btnExportRice: "📥 Download Rice Excel",
                 btnClearRice: "🧹 Clear Rice",
+                expenseHeader: "💸 Expense Tracker",
+                btnAddExp: "+ Add",
+                lblTotalExpenses: "Total Expenses:",
                 gcashHeader: "📱 GCash Transactions Tracker",
                 btnAdd: "+ Add",
                 lblCashInVol: "Cash In Vol:",
@@ -601,10 +649,15 @@
                 thFee: "Fee",
                 thRef: "Ref No.",
                 btnExportGCash: "📥 Download GCash Excel",
+                remittanceHeader: "🔒 Daily Closing & Remittance (Cash in Drawer)",
+                lblCashFromRice: "Cash from Rice Sales:",
+                lblCashFromGCashCapital: "Net Cash from GCash (Flow + Fees):",
+                lblMinusExpenses: "Less Expenses:",
+                lblTotalCashInDrawer: "TOTAL EXPECTED CASH IN DRAWER:",
                 overallSummaryTitle: "📊 Overall Store Summary",
-                cardRiceNet: "🌾 Rice Net Cash",
+                cardRiceNet: "🌾 Rice Net Profit",
                 cardGCashNet: "📱 GCash Net Fee",
-                combinedProfitTitle: "TOTAL STORE PROFIT (COMBINED)",
+                combinedProfitTitle: "TOTAL STORE NET PROFIT",
                 btnPrint: "🖨️ Print Report",
                 btnReset: "🗑️ Reset All",
                 toastSaved: "Data saved successfully!",
@@ -616,9 +669,7 @@
             let toast = document.getElementById("toastNotification");
             toast.textContent = message;
             toast.className = "show";
-            setTimeout(() => {
-                toast.className = "";
-            }, 3000);
+            setTimeout(() => { toast.className = ""; }, 3000);
         }
 
         function toggleLanguage() {
@@ -630,9 +681,7 @@
             const t = translations[currentLang];
             document.querySelectorAll("[data-translate]").forEach(el => {
                 const key = el.getAttribute("data-translate");
-                if (t[key]) {
-                    el.textContent = t[key];
-                }
+                if (t[key]) { el.textContent = t[key]; }
             });
             document.getElementById("langToggleBtn").textContent = t.langBtn;
         }
@@ -676,10 +725,11 @@
         let gcashCashInVol = 0;
         let gcashCashOutVol = 0;
         let gcashTotalFees = 0;
+        let gcashNetFlowTotal = 0; // Cash In - Cash Out + Fees
         let gcashTransactions = [];
+        let expensesList = [];
         let processedRefNos = new Set();
 
-        // Updated GCash Fee Matrix (₱1-999 = ₱10, ₱1000 = ₱20, ₱1500 = ₱30, etc.)
         function calculateAutomaticFee(amount) {
             if (amount <= 0) return 0;
             if (amount <= 999) return 10;
@@ -691,7 +741,6 @@
             let totalPuhunanSum = 0;
             let totalBentaSum = 0;
             let totalProfitSum = 0;
-
             let riceDataToSave = [];
 
             rows.forEach((row) => {
@@ -701,7 +750,6 @@
                 let presyoBentaPerSako = parseFloat(row.querySelector(".presyo").value) || 0;
 
                 let natira = binili - nabenta;
-                
                 let totalCostFullBatch = binili * puhunanPerSako;
                 let totalSalesActual = nabenta * presyoBentaPerSako;
                 let profit = totalSalesActual - totalCostFullBatch;
@@ -736,7 +784,6 @@
                 totalPuhunanSum += totalCostFullBatch;
                 totalBentaSum += totalSalesActual;
                 totalProfitSum += profit;
-
                 riceDataToSave.push({ binili, puhunan: puhunanPerSako, nabenta, presyo: presyoBentaPerSako });
             });
 
@@ -755,8 +802,8 @@
                 riceProfitElem.style.color = "#64748b";
             }
 
-            localStorage.setItem("rice_pos_data_v3", JSON.stringify(riceDataToSave));
-            updateOverallSummary(totalProfitSum);
+            localStorage.setItem("rice_pos_data_v4", JSON.stringify(riceDataToSave));
+            updateOverallSummary(totalProfitSum, totalBentaSum);
         }
 
         function addGCashEntry(type, amount, fee, refNo, isFromSMS = false) {
@@ -767,11 +814,16 @@
                 parsedFee = calculateAutomaticFee(parsedAmount);
             }
 
-            if (type === "Cash In" || type === "CASH_IN" || type === "cashin") type = "Cash In";
-            if (type === "Cash Out" || type === "CASH_OUT" || type === "cashout") type = "Cash Out";
-
-            if (type === "Cash In") gcashCashInVol += parsedAmount;
-            if (type === "Cash Out") gcashCashOutVol += parsedAmount;
+            if (type === "Cash In" || type === "CASH_IN" || type === "cashin") {
+                type = "Cash In";
+                gcashCashInVol += parsedAmount;
+                gcashNetFlowTotal += parsedAmount + parsedFee; // pumasok na cash + fee
+            } else if (type === "Cash Out" || type === "CASH_OUT" || type === "cashout") {
+                type = "Cash Out";
+                gcashCashOutVol += parsedAmount;
+                gcashNetFlowTotal -= parsedAmount; // lumabas na cash, kinuha sa kaha
+            }
+            
             gcashTotalFees += parsedFee;
 
             document.getElementById("gcInVol").textContent = "₱" + gcashCashInVol.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -779,9 +831,8 @@
             document.getElementById("gcFeeTotal").textContent = "₱" + gcashTotalFees.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
             let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
             gcashTransactions.push({ time: timeStr, type, amount: parsedAmount, fee: parsedFee, refNo: refNo || 'N/A' });
-            localStorage.setItem("gcash_pos_data_v3", JSON.stringify(gcashTransactions));
+            localStorage.setItem("gcash_pos_data_v4", JSON.stringify(gcashTransactions));
 
             let tbody = document.getElementById("gcLogTable");
             let newRow = document.createElement("tr");
@@ -795,10 +846,7 @@
             tbody.prepend(newRow);
 
             calculateAll();
-
-            if (isFromSMS) {
-                showToast(translations[currentLang].toastNewSMS);
-            }
+            if (isFromSMS) { showToast(translations[currentLang].toastNewSMS); }
         }
 
         function manualAddGCash() {
@@ -817,7 +865,40 @@
             document.getElementById("gcRef").value = "";
         }
 
-        function updateOverallSummary(riceProfit) {
+        function addExpense() {
+            let desc = document.getElementById("expDesc").value;
+            let amount = parseFloat(document.getElementById("expAmount").value) || 0;
+
+            if(!desc || amount <= 0) {
+                return alert(currentLang === 'tl' ? "Ilagay ang pangalan at tamang halaga ng gastusin!" : "Enter valid expense description and amount!");
+            }
+
+            expensesList.push({ desc, amount });
+            localStorage.setItem("store_expenses_v4", JSON.stringify(expensesList));
+            
+            document.getElementById("expDesc").value = "";
+            document.getElementById("expAmount").value = "";
+
+            calculateAll();
+            showToast(translations[currentLang].toastSaved);
+        }
+
+        function updateOverallSummary(riceProfit, totalRiceSales) {
+            // Kalkulahin ang total expenses
+            let totalExpenses = expensesList.reduce((sum, item) => sum + item.amount, 0);
+            document.getElementById("totalExpensesVal").textContent = "₱" + totalExpenses.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            // Remittance / Daily Closing Calculator
+            document.getElementById("remitRiceSales").textContent = "₱" + totalRiceSales.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById("remitGCashFlow").textContent = "₱" + gcashNetFlowTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById("remitExpenses").textContent = "-₱" + totalExpenses.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            // Total Cash in Drawer = Total Rice Sales + GCash Net Cash Flow - Expenses
+            let totalCashInDrawer = totalRiceSales + gcashNetFlowTotal - totalExpenses;
+            let drawerElem = document.getElementById("totalCashInDrawer");
+            drawerElem.textContent = "₱" + totalCashInDrawer.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            // Net Profit Display (Rice Profit + GCash Fees - Expenses)
             let splitRiceElem = document.getElementById("splitRiceVal");
             if (riceProfit > 0) {
                 splitRiceElem.textContent = "+₱" + riceProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -833,14 +914,14 @@
             let splitGCashElem = document.getElementById("splitGCashVal");
             splitGCashElem.textContent = "+₱" + gcashTotalFees.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
-            let totalNetProfitCombined = riceProfit + gcashTotalFees;
+            let netStoreProfit = riceProfit + gcashTotalFees - totalExpenses;
             let overallElem = document.getElementById("overallProfit");
             
-            if (totalNetProfitCombined > 0) {
-                overallElem.textContent = "+₱" + totalNetProfitCombined.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            if (netStoreProfit > 0) {
+                overallElem.textContent = "+₱" + netStoreProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 overallElem.style.color = "#34d399";
-            } else if (totalNetProfitCombined < 0) {
-                overallElem.textContent = "-₱" + Math.abs(totalNetProfitCombined).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            } else if (netStoreProfit < 0) {
+                overallElem.textContent = "-₱" + Math.abs(netStoreProfit).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                 overallElem.style.color = "#f87171";
             } else {
                 overallElem.textContent = "₱0.00";
@@ -857,19 +938,12 @@
                         badge.innerText = "📱 Node.js Server: Connected (192.168.1.3)";
                         badge.style.backgroundColor = "rgba(34, 197, 94, 0.3)";
                     }
-                    
                     let items = Array.isArray(data) ? data : [data];
-                    
                     items.forEach(item => {
                         let refNo = item.refNo || item.ref_no || item.reference;
-                        
                         if (refNo && !processedRefNos.has(refNo)) {
                             processedRefNos.add(refNo);
-                            let type = item.type || "Cash In";
-                            let amount = item.amount || 0;
-                            let fee = item.fee || 0;
-                            
-                            addGCashEntry(type, amount, fee, refNo, true);
+                            addGCashEntry(item.type || "Cash In", item.amount || 0, item.fee || 0, refNo, true);
                         }
                     });
                 })
@@ -896,7 +970,7 @@
         }
 
         function resetAllData() {
-            let msg = currentLang === 'tl' ? "⚠️ Sigurado ka bang i-re-reset ang LAHAT ng benta at GCash?" : "⚠️ Are you sure you want to reset ALL sales and GCash data?";
+            let msg = currentLang === 'tl' ? "⚠️ Sigurado ka bang i-re-reset ang LAHAT ng benta, gastusin, at GCash?" : "⚠️ Reset all store data?";
             if(confirm(msg)) {
                 localStorage.clear();
                 location.reload();
@@ -904,7 +978,7 @@
         }
 
         function exportRiceCSV() {
-            let csv = "Uri ng Bigas,Binili (Sako),Puhunan/Sako,Nabenta (Sako),Presyo Benta/Sako,Natira,Total Puhunan,Total Benta,Profit/Loss,Status\n";
+            let csv = "Uri ng Bigas,Binili,Puhunan,Nabenta,Presyo,Natira,Tot Puhunan,Tot Benta,Profit/Loss,Status\n";
             document.querySelectorAll("#riceTableBody tr").forEach(row => {
                 let name = row.cells[0].innerText.replace('🌾 ', '');
                 let binili = row.querySelector(".binili").value;
@@ -916,14 +990,13 @@
                 let totBen = row.querySelector(".tot-benta").innerText.replace(/[^0-9.-]+/g,"");
                 let prof = row.querySelector(".profit-loss").innerText.replace(/[^0-9.-]+/g,"");
                 let status = row.cells[9].innerText;
-
                 csv += `"${name}",${binili},${puhunan},${nabenta},${presyo},${natira},${totPuh},${totBen},${prof},${status}\n`;
             });
             let blob = new Blob([csv], { type: 'text/csv' });
             let url = window.URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.setAttribute('href', url);
-            a.setAttribute('download', 'Bigasan_Inventory_Report.csv');
+            a.setAttribute('download', 'Bigasan_Report.csv');
             a.click();
         }
 
@@ -936,11 +1009,16 @@
             let url = window.URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.setAttribute('href', url);
-            a.setAttribute('download', 'GCash_Transactions_Report.csv');
+            a.setAttribute('download', 'GCash_Report.csv');
             a.click();
         }
 
         window.onload = function() {
+            // Load saved expenses if any
+            let savedExp = localStorage.getItem("store_expenses_v4");
+            if(savedExp) {
+                expensesList = JSON.parse(savedExp);
+            }
             calculateAll();
         }
     </script>
