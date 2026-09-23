@@ -151,17 +151,59 @@
                 </tr>
             </thead>
             <tbody id="riceTableBody">
-                <!-- Default Row 1 -->
+                <!-- Default Varieties -->
                 <tr>
                     <td><input type="text" class="rice-name" value="Sinandomeng"></td>
-                    <td><input type="number" class="sacks-bought" value="10" oninput="calculateRice()"></td>
-                    <td><input type="number" class="cost-sack" value="2000" oninput="calculateRice()"></td>
-                    <td><input type="number" class="sell-sack" value="2300" oninput="calculateRice()"></td>
-                    <td><input type="number" class="sacks-sold" value="4" oninput="calculateRice()"></td>
+                    <td><input type="number" class="sacks-bought" value="10" oninput="calculateAll()"></td>
+                    <td><input type="number" class="cost-sack" value="2000" oninput="calculateAll()"></td>
+                    <td><input type="number" class="sell-sack" value="2300" oninput="calculateAll()"></td>
+                    <td><input type="number" class="sacks-sold" value="4" oninput="calculateAll()"></td>
                     <td class="sacks-remaining">6</td>
                     <td class="rice-revenue">₱9,200.00</td>
                     <td class="rice-profit">₱1,200.00</td>
                     <td><button onclick="deleteRiceRow(this)" class="btn-delete">Delete</button></td>
+                </tr>
+                <tr>
+                    <td><input type="text" class="rice-name" value="Jaguar"></td>
+                    <td><input type="number" class="sacks-bought" value="8" oninput="calculateAll()"></td>
+                    <td><input type="number" class="cost-sack" value="1900" oninput="calculateAll()"></td>
+                    <td><input type="number" class="sell-sack" value="2200" oninput="calculateAll()"></td>
+                    <td><input type="number" class="sacks-sold" value="3" oninput="calculateAll()"></td>
+                    <td class="sacks-remaining">5</td>
+                    <td class="rice-revenue">₱6,600.00</td>
+                    <td class="rice-profit">₱900.00</td>
+                    <td><button onclick="deleteRiceRow(this)" class="btn-delete">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- GCash Transactions Tracker Section -->
+    <div class="card">
+        <h3>GCash Transactions Tracker</h3>
+        <button onclick="addNewGcashRow()" class="btn-add">+ Add Transaction</button>
+        <table id="gcashTable">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Fee</th>
+                    <th>Ref No.</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="gcashTableBody">
+                <tr>
+                    <td>
+                        <select class="gcash-type" onchange="calculateAll()">
+                            <option value="Cash In">Cash In</option>
+                            <option value="Cash Out">Cash Out</option>
+                        </select>
+                    </td>
+                    <td><input type="number" class="gcash-amount" value="500" oninput="calculateAll()"></td>
+                    <td><input type="number" class="gcash-fee" value="15" oninput="calculateAll()"></td>
+                    <td><input type="text" class="gcash-ref" value="123456789"></td>
+                    <td><button onclick="deleteGcashRow(this)" class="btn-delete">Delete</button></td>
                 </tr>
             </tbody>
         </table>
@@ -172,12 +214,16 @@
         <h3>Store Summary</h3>
         <div class="summary-box">
             <div class="summary-card">
-                <h4>Total Revenue</h4>
+                <h4>Total Rice Revenue</h4>
                 <p id="totalRevenueDisplay">₱0.00</p>
             </div>
             <div class="summary-card">
-                <h4>Total Net Profit</h4>
+                <h4>Total Rice Net Profit</h4>
                 <p id="totalProfitDisplay">₱0.00</p>
+            </div>
+            <div class="summary-card">
+                <h4>Total GCash Fees Earned</h4>
+                <p id="totalGcashFeeDisplay">₱0.00</p>
             </div>
         </div>
     </div>
@@ -189,11 +235,11 @@
         const newRow = document.createElement('tr');
         
         newRow.innerHTML = `
-            <td><input type="text" class="rice-name" placeholder="Enter brand name" value="New Brand"></td>
-            <td><input type="number" class="sacks-bought" value="0" oninput="calculateRice()"></td>
-            <td><input type="number" class="cost-sack" value="0" oninput="calculateRice()"></td>
-            <td><input type="number" class="sell-sack" value="0" oninput="calculateRice()"></td>
-            <td><input type="number" class="sacks-sold" value="0" oninput="calculateRice()"></td>
+            <td><input type="text" class="rice-name" placeholder="Brand name" value="New Brand"></td>
+            <td><input type="number" class="sacks-bought" value="0" oninput="calculateAll()"></td>
+            <td><input type="number" class="cost-sack" value="0" oninput="calculateAll()"></td>
+            <td><input type="number" class="sell-sack" value="0" oninput="calculateAll()"></td>
+            <td><input type="number" class="sacks-sold" value="0" oninput="calculateAll()"></td>
             <td class="sacks-remaining">0</td>
             <td class="rice-revenue">₱0.00</td>
             <td class="rice-profit">₱0.00</td>
@@ -201,16 +247,42 @@
         `;
         
         tbody.appendChild(newRow);
-        calculateRice();
+        calculateAll();
     }
 
     function deleteRiceRow(button) {
-        const row = button.closest('tr');
-        row.remove();
-        calculateRice();
+        button.closest('tr').remove();
+        calculateAll();
     }
 
-    function calculateRice() {
+    function addNewGcashRow() {
+        const tbody = document.getElementById('gcashTableBody');
+        const newRow = document.createElement('tr');
+        
+        newRow.innerHTML = `
+            <td>
+                <select class="gcash-type" onchange="calculateAll()">
+                    <option value="Cash In">Cash In</option>
+                    <option value="Cash Out">Cash Out</option>
+                </select>
+            </td>
+            <td><input type="number" class="gcash-amount" value="0" oninput="calculateAll()"></td>
+            <td><input type="number" class="gcash-fee" value="0" oninput="calculateAll()"></td>
+            <td><input type="text" class="gcash-ref" placeholder="Ref No."></td>
+            <td><button onclick="deleteGcashRow(this)" class="btn-delete">Delete</button></td>
+        `;
+        
+        tbody.appendChild(newRow);
+        calculateAll();
+    }
+
+    function deleteGcashRow(button) {
+        button.closest('tr').remove();
+        calculateAll();
+    }
+
+    function calculateAll() {
+        // Calculate Rice Inventory
         const rows = document.querySelectorAll('#riceTableBody tr');
         let grandTotalRevenue = 0;
         let grandTotalProfit = 0;
@@ -233,19 +305,31 @@
             row.querySelector('.rice-profit').textContent = `₱${profit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         });
 
+        // Calculate GCash Fees
+        const gcashRows = document.querySelectorAll('#gcashTableBody tr');
+        let totalGcashFees = 0;
+
+        gcashRows.forEach(row => {
+            const fee = parseFloat(row.querySelector('.gcash-fee').value) || 0;
+            totalGcashFees += fee;
+        });
+
+        // Display Summaries
         document.getElementById('totalRevenueDisplay').textContent = `₱${grandTotalRevenue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         document.getElementById('totalProfitDisplay').textContent = `₱${grandTotalProfit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('totalGcashFeeDisplay').textContent = `₱${totalGcashFees.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
     }
 
     function resetAll() {
-        if(confirm("Are you sure you want to reset the table?")) {
+        if(confirm("Are you sure you want to reset all tables?")) {
             document.getElementById('riceTableBody').innerHTML = '';
+            document.getElementById('gcashTableBody').innerHTML = '';
             addNewRiceRow();
+            addNewGcashRow();
         }
     }
 
-    // Run initial calculation on load
-    window.onload = calculateRice;
+    window.onload = calculateAll;
 </script>
 
 </body>
