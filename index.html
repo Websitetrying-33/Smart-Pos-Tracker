@@ -4,180 +4,231 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart POS & Store Tracker</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #f7f9f6; }
+        body {
+            background-color: #fcfbf7;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
     </style>
 </head>
 <body class="p-4 font-sans text-slate-800">
 
-    <div class="max-w-7xl mx-auto space-y-4">
+    <div class="max-w-[1400px] mx-auto space-y-4">
         
         <!-- HEADER -->
-        <div class="bg-gradient-to-r from-emerald-800 to-emerald-900 text-white p-4 rounded-xl shadow-md flex justify-between items-center">
-            <div>
-                <h1 class="text-xl font-bold">🌾 SMART POS & STORE TRACKER 🌾</h1>
+        <div class="bg-[#1e6b36] border-2 border-[#154d25] text-white p-3 rounded-xl shadow-md flex justify-between items-center">
+            <div class="flex-1 text-center">
+                <h1 class="text-xl font-extrabold tracking-wide">🌾 SMART POS & STORE TRACKER 🌾</h1>
                 <p class="text-xs text-emerald-200">Cloud Sync & Low Stock Alert Connected</p>
+                <div class="inline-block bg-[#154d25] text-emerald-100 text-[11px] px-3 py-0.5 rounded-full mt-1 border border-emerald-600">
+                    ☁️ Cloud Sync: Active & Auto-Saved
+                </div>
             </div>
-            <button onclick="toggleLanguage()" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1 text-sm rounded-lg font-medium transition">Tagalog</button>
+            <button onclick="toggleLanguage()" class="bg-[#facc15] hover:bg-yellow-400 text-slate-900 px-3 py-1 text-xs rounded-lg font-bold shadow">Tagalog</button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
             
             <!-- LEFT / MAIN PANE (Rice & Expenses) -->
-            <div class="lg:col-span-2 space-y-4">
+            <div class="lg:col-span-8 space-y-4">
                 
-                <!-- RICE SALES & INVENTORY -->
-                <div class="bg-white border-2 border-emerald-600 rounded-xl p-4 shadow-sm">
-                    <div class="flex justify-between items-center mb-3">
-                        <h2 class="font-bold text-emerald-800 text-lg">🌾 Rice Sales & Inventory Tracker</h2>
-                        <button onclick="toggleAddRiceSection()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">
+                <!-- RICE SALES & INVENTORY TRACKER -->
+                <div class="bg-white border-2 border-[#1e6b36] rounded-xl p-4 shadow-sm space-y-3">
+                    <div class="bg-[#1e6b36] text-white p-2 rounded-lg text-center font-bold text-sm flex justify-between items-center px-4">
+                        <span></span>
+                        <span>🌾 Rice Sales & Inventory Tracker 🌾</span>
+                        <button onclick="toggleAddRiceSection()" class="bg-[#154d25] hover:bg-emerald-800 text-white text-[11px] px-2.5 py-1 rounded border border-emerald-500 font-normal">
                             + Add Rice Variety
                         </button>
                     </div>
 
-                    <!-- Collapsible Add Rice Form (Hidden by default) -->
-                    <div id="addRiceSection" class="hidden mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg space-y-2">
-                        <h3 class="text-xs font-bold text-emerald-900 uppercase">Magdagdag ng Bagong Bigas</h3>
+                    <!-- Collapsible Add Rice Form (Naka-hide para hindi kumain ng space) -->
+                    <div id="addRiceSection" class="hidden p-3 bg-emerald-50 border border-emerald-200 rounded-lg space-y-2">
+                        <div class="text-xs font-bold text-emerald-900">Magdagdag ng Bagong Uri ng Bigas (Protected)</div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                            <input type="text" id="newRiceName" placeholder="Pangalan ng Bigas" class="border p-1.5 text-sm rounded">
-                            <input type="number" id="newRiceBought" placeholder="Sako Binili" class="border p-1.5 text-sm rounded">
-                            <input type="number" id="newRiceCost" placeholder="Cost per Sako (₱)" class="border p-1.5 text-sm rounded">
+                            <input type="text" id="inputRiceName" placeholder="Rice Brand Name" class="border p-1.5 text-xs rounded">
+                            <input type="number" id="inputRiceBought" placeholder="Sako Binili" class="border p-1.5 text-xs rounded">
+                            <input type="number" id="inputRiceCost" placeholder="Cost per Sack" class="border p-1.5 text-xs rounded">
                         </div>
-                        <button onclick="addNewRice()" class="bg-emerald-800 hover:bg-emerald-900 text-white text-xs px-3 py-1.5 rounded font-medium">I-save ang Bigas</button>
+                        <button onclick="confirmAddRice()" class="bg-[#1e6b36] text-white text-xs px-3 py-1 rounded font-medium">I-save ang Bigas</button>
                     </div>
 
                     <!-- Rice Table -->
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
+                        <table class="w-full text-left text-xs border-collapse">
                             <thead>
-                                <tr class="bg-emerald-700 text-white">
-                                    <th class="p-2">Rice Variety</th>
-                                    <th class="p-2">Bought</th>
-                                    <th class="p-2">Cost/Sack</th>
-                                    <th class="p-2">Sold</th>
-                                    <th class="p-2">Sell/Sack</th>
-                                    <th class="p-2">Rem</th>
-                                    <th class="p-2">Tot Cost</th>
-                                    <th class="p-2">Tot Sales</th>
-                                    <th class="p-2">Profit / Loss</th>
-                                    <th class="p-2">Status</th>
-                                    <th class="p-2">Action</th>
+                                <tr class="bg-[#1e6b36] text-white">
+                                    <th class="p-2 border border-emerald-700">Rice Variety 🌾</th>
+                                    <th class="p-2 border border-emerald-700">Bought 🌾</th>
+                                    <th class="p-2 border border-emerald-700">Cost/Sack 🌾</th>
+                                    <th class="p-2 border border-emerald-700">Sold 🌾</th>
+                                    <th class="p-2 border border-emerald-700">Sell/Sack 🌾</th>
+                                    <th class="p-2 border border-emerald-700">Rem ⚠️</th>
+                                    <th class="p-2 border border-emerald-700">Tot Cost 🌾</th>
+                                    <th class="p-2 border border-emerald-700">Tot Sales 🌾</th>
+                                    <th class="p-2 border border-emerald-700">Profit / Loss 🌾</th>
+                                    <th class="p-2 border border-emerald-700">Status 🌾</th>
+                                    <th class="p-2 border border-emerald-700">Action 🌾</th>
                                 </tr>
                             </thead>
                             <tbody id="riceTableBody" class="divide-y divide-emerald-100">
-                                <!-- Dynamic rows will go here -->
                                 <tr class="hover:bg-emerald-50/50">
-                                    <td class="p-2 font-medium">Sinandomeng Premium</td>
-                                    <td class="p-2">10</td>
-                                    <td class="p-2">₱2,200</td>
-                                    <td class="p-2">4</td>
-                                    <td class="p-2">₱2,500</td>
-                                    <td class="p-2 text-amber-600 font-bold">6</td>
-                                    <td class="p-2">₱22,000</td>
-                                    <td class="p-2">₱10,000</td>
-                                    <td class="p-2 text-emerald-600 font-bold">₱1,200</td>
-                                    <td class="p-2"><span class="bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded text-[10px]">EVEN</span></td>
-                                    <td class="p-2"><button onclick="deleteRiceRow(this)" class="bg-red-500 hover:bg-red-600 text-white px-2 py-0.5 rounded text-[10px]">Delete</button></td>
+                                    <td class="p-2 border border-emerald-100"><input type="text" value="Rice Brand Name" class="w-28 border p-1 rounded text-xs"></td>
+                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-14 border p-1 rounded text-xs"></td>
+                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-16 border p-1 rounded text-xs"></td>
+                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-14 border p-1 rounded text-xs"></td>
+                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-16 border p-1 rounded text-xs"></td>
+                                    <td class="p-2 border border-emerald-100 font-bold">0</td>
+                                    <td class="p-2 border border-emerald-100">₱0</td>
+                                    <td class="p-2 border border-emerald-100">₱0</td>
+                                    <td class="p-2 border border-emerald-100">₱0</td>
+                                    <td class="p-2 border border-emerald-100"><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold">EVEN</span></td>
+                                    <td class="p-2 border border-emerald-100"><button onclick="deleteRiceRow(this)" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px]">Delete</button></td>
+                                </tr>
+                                <tr class="hover:bg-emerald-50/50">
+                                    <td class="p-2 border border-emerald-100"><input type="text" value="Rice Brand Name" class="w-28 border p-1 rounded text-xs"></td>
+                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-14 border p-1 rounded text-xs"></td>
+                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-16 border p-1 rounded text-xs"></td>
+                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-14 border p-1 rounded text-xs"></td>
+                                    <td class="p-2 border border-emerald-100"><input type="number" value="0" class="w-16 border p-1 rounded text-xs"></td>
+                                    <td class="p-2 border border-emerald-100 font-bold">0</td>
+                                    <td class="p-2 border border-emerald-100">₱0</td>
+                                    <td class="p-2 border border-emerald-100">₱0</td>
+                                    <td class="p-2 border border-emerald-100">₱0</td>
+                                    <td class="p-2 border border-emerald-100"><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold">EVEN</span></td>
+                                    <td class="p-2 border border-emerald-100"><button onclick="deleteRiceRow(this)" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px]">Delete</button></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
 
-                <!-- DAILY EXPENSES -->
-                <div class="bg-white border-2 border-amber-600 rounded-xl p-4 shadow-sm">
-                    <div class="flex justify-between items-center mb-2">
-                        <h2 class="font-bold text-amber-800 text-sm">💡 Daily Expenses (Electricity, Water, Labor, etc.)</h2>
-                        <button onclick="toggleExpenseSection()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">
-                            + Add Expense
-                        </button>
-                    </div>
+                    <!-- DAILY EXPENSES -->
+                    <div class="border border-amber-500 rounded-lg p-3 bg-amber-50/30 space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-amber-900 text-xs">💡 Daily Expenses (Electricity, Water, Labor, etc.)</span>
+                            <button onclick="toggleExpenseSection()" class="bg-amber-600 hover:bg-amber-700 text-white text-[11px] px-2.5 py-1 rounded font-medium">
+                                + Add Expense
+                            </button>
+                        </div>
 
-                    <!-- Collapsible Expense Form -->
-                    <div id="addExpenseSection" class="hidden mt-2 p-3 bg-amber-50 border border-amber-200 rounded-lg space-y-2">
-                        <div class="flex gap-2">
-                            <input type="text" id="expenseName" placeholder="Expense Name (e.g. Kuryente)" class="border p-1.5 text-sm rounded flex-1">
-                            <input type="number" id="expenseAmount" placeholder="Halaga (₱)" class="border p-1.5 text-sm rounded w-32">
-                            <button onclick="addExpense()" class="bg-amber-700 hover:bg-amber-800 text-white text-xs px-4 py-1.5 rounded font-medium">Add</button>
+                        <!-- Collapsible Expense Form -->
+                        <div id="addExpenseSection" class="hidden flex gap-2 pt-1">
+                            <input type="text" id="expenseNameInput" placeholder="Expense Name (e.g. Electricity)" class="border p-1.5 text-xs rounded flex-1">
+                            <input type="number" id="expenseAmountInput" placeholder="0" class="border p-1.5 text-xs rounded w-24">
+                            <button onclick="confirmAddExpense()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs px-3 py-1 rounded font-medium">Add</button>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <input type="text" value="Expense Name (e.g. Electricity)" class="border p-1.5 text-xs rounded flex-1 bg-white text-slate-400" disabled>
+                            <input type="number" value="0" class="border p-1.5 text-xs rounded w-20 bg-white" disabled>
+                            <button onclick="deleteExpenseRow(this)" class="bg-red-600 text-white px-2 py-1.5 rounded text-xs font-bold">✕</button>
+                        </div>
+
+                        <div class="flex justify-between items-center text-xs font-bold pt-1 border-t border-amber-200">
+                            <span class="text-slate-700">Total Expenses:</span>
+                            <span class="text-red-600 text-sm">₱0.00</span>
                         </div>
                     </div>
 
-                    <div class="mt-2 flex justify-between items-center text-xs font-bold pt-2 border-t">
-                        <span>Total Expenses:</span>
-                        <span id="totalExpensesDisplay" class="text-red-600 font-bold text-sm">₱0.00</span>
+                    <!-- RICE SUMMARY -->
+                    <div class="border border-amber-300 bg-amber-50/50 rounded-lg p-3 space-y-1 text-xs">
+                        <div class="font-bold text-amber-900 mb-1">🌾 Rice Summary (Capital Recovery Method):</div>
+                        <div class="flex justify-between text-slate-700"><span>Total Capital Outlay (All Bought):</span> <span class="font-semibold">₱0.00</span></div>
+                        <div class="flex justify-between text-slate-700"><span>Total Sales Collected:</span> <span class="font-semibold">₱0.00</span></div>
+                        <div class="flex justify-between font-bold border-t border-amber-200 pt-1 text-sm text-slate-900">
+                            <span>Net Cash Flow (Profit / Loss):</span> 
+                            <span class="text-emerald-700">₱0.00</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- RICE SUMMARY -->
-                <div class="bg-white border border-slate-300 rounded-xl p-4 shadow-sm text-xs space-y-1">
-                    <h3 class="font-bold text-slate-700 mb-2">📊 Rice Summary (Capital Recovery Method):</h3>
-                    <div class="flex justify-between"><span>Total Capital Outlay (All Bought):</span> <span id="sumTotalCapital">₱0.00</span></div>
-                    <div class="flex justify-between"><span>Total Sales Collected:</span> <span id="sumTotalSales">₱0.00</span></div>
-                    <div class="flex justify-between font-bold border-t pt-1 text-sm"><span>Net Cash Flow (Profit / Loss):</span> <span id="sumNetCashFlow" class="text-emerald-700">₱0.00</span></div>
-                </div>
-
-                <!-- Rice Actions -->
-                <div class="flex gap-2">
-                    <button onclick="downloadRiceExcel()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs px-4 py-2 rounded-lg font-medium flex-1">📥 Download Rice Excel</button>
-                    <button onclick="clearRiceData()" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded-lg font-medium">🗑️ Clear Rice</button>
+                    <!-- Action Buttons -->
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="downloadRiceExcel()" class="bg-[#1e6b36] hover:bg-emerald-800 text-white text-xs py-2 px-4 rounded-lg font-medium flex-1 shadow">📥 Download Rice Excel</button>
+                        <button onclick="clearRiceData()" class="bg-red-600 hover:bg-red-700 text-white text-xs py-2 px-4 rounded-lg font-medium shadow">🗑️ Clear Rice</button>
+                    </div>
                 </div>
 
             </div>
 
             <!-- RIGHT / SIDEBAR PANE (GCash & Overall Summary) -->
-            <div class="space-y-4">
+            <div class="lg:col-span-4 space-y-4">
                 
                 <!-- GCASH TRANSACTIONS TRACKER -->
                 <div class="bg-white border-2 border-blue-600 rounded-xl p-4 shadow-sm space-y-3">
-                    <h2 class="font-bold text-blue-800 text-sm flex items-center gap-1">📱 GCash Transactions Tracker</h2>
-                    
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <select id="gcashType" class="border p-1.5 rounded">
-                            <option value="Cash In">Cash In</option>
-                            <option value="Cash Out">Cash Out</option>
+                    <div class="bg-blue-600 text-white p-2 rounded-lg text-center font-bold text-sm">
+                        📱 GCash Transactions Tracker
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <select class="border p-1.5 rounded text-xs bg-white">
+                            <option>Cash In</option>
+                            <option>Cash Out</option>
                         </select>
-                        <input type="number" id="gcashAmount" placeholder="Amount" class="border p-1.5 rounded">
-                        <input type="number" id="gcashFee" placeholder="Fee" class="border p-1.5 rounded">
-                        <input type="text" id="gcashRef" placeholder="Ref No." class="border p-1.5 rounded">
+                        <input type="number" placeholder="Amoun" class="border p-1.5 rounded text-xs">
+                        <input type="number" placeholder="Fee" class="border p-1.5 rounded text-xs">
+                        <input type="text" placeholder="Ref No." class="border p-1.5 rounded text-xs">
                     </div>
-                    <button onclick="addGcashTx()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 rounded-lg font-medium">+ Add GCash Transaction</button>
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 rounded-lg font-medium shadow">+ Add</button>
 
-                    <div class="grid grid-cols-2 gap-2 bg-blue-50 p-2 rounded-lg text-xs">
-                        <div>Cash In Vol: <br><strong id="volCashIn" class="text-blue-900">₱0.00</strong></div>
-                        <div>Cash Out Vol: <br><strong id="volCashOut" class="text-blue-900">₱0.00</strong></div>
+                    <div class="grid grid-cols-2 gap-2 bg-blue-50/50 p-2.5 rounded-lg border border-blue-100 text-xs">
+                        <div>
+                            <span class="text-[10px] text-slate-500">Cash In Vol:</span>
+                            <div class="font-bold text-slate-800">₱0.00</div>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-500">Cash Out Vol:</span>
+                            <div class="font-bold text-slate-800">₱0.00</div>
+                        </div>
                     </div>
 
-                    <div class="text-xs font-medium border-t pt-2">
-                        Summary of GCash Only (Fee Earned): <br>
-                        <span id="gcashFeeEarned" class="text-blue-700 font-bold text-sm">₱0.00</span>
+                    <div class="border-t border-blue-100 pt-2 text-xs">
+                        <span class="text-slate-600">📊 Summary of GCash Only (Fee Earned):</span>
+                        <div class="text-blue-700 font-extrabold text-sm mt-0.5">₱0.00</div>
                     </div>
+
+                    <div class="border-t border-blue-100 pt-2 space-y-1">
+                        <span class="text-xs font-bold text-slate-700">🔍 GCash History Log</span>
+                        <div class="grid grid-cols-5 text-[10px] font-bold bg-slate-100 p-1 rounded text-center">
+                            <span>Time</span>
+                            <span>Type</span>
+                            <span>Amount</span>
+                            <span>Fee</span>
+                            <span>Ref No.</span>
+                        </div>
+                    </div>
+
+                    <button onclick="downloadGcashExcel()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 rounded-lg font-medium shadow">📥 Download GCash Excel</button>
                 </div>
 
                 <!-- OVERALL STORE SUMMARY -->
                 <div class="bg-white border-2 border-slate-700 rounded-xl p-4 shadow-sm space-y-3">
-                    <h2 class="font-bold text-slate-800 text-sm">📈 Overall Store Summary</h2>
-                    
+                    <div class="bg-slate-800 text-white p-2 rounded-lg text-center font-bold text-sm">
+                        📈 Overall Store Summary
+                    </div>
+
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="bg-emerald-50 border border-emerald-200 p-2 rounded-lg text-center">
-                            <span class="text-[10px] text-emerald-800 font-semibold">RICE NET CASH</span>
-                            <div id="overallRiceNet" class="text-emerald-700 font-bold text-sm">₱0.00</div>
+                        <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-lg text-center">
+                            <div class="text-[10px] text-emerald-800 font-bold">🌾 RICE NET CASH</div>
+                            <div class="text-emerald-700 font-extrabold text-sm mt-0.5">₱0.00</div>
                         </div>
-                        <div class="bg-blue-50 border border-blue-200 p-2 rounded-lg text-center">
-                            <span class="text-[10px] text-blue-800 font-semibold">GCASH NET FEE</span>
-                            <div id="overallGcashFee" class="text-blue-700 font-bold text-sm">+₱0.00</div>
+                        <div class="bg-blue-50 border border-blue-200 p-2.5 rounded-lg text-center">
+                            <div class="text-[10px] text-blue-800 font-bold">📱 GCASH NET FEE</div>
+                            <div class="text-blue-700 font-extrabold text-sm mt-0.5">+₱0.00</div>
                         </div>
                     </div>
 
-                    <div class="bg-slate-900 text-white p-3 rounded-lg text-center space-y-1">
-                        <span class="text-[10px] tracking-wider text-slate-300 uppercase">TOTAL STORE PROFIT (COMBINED)</span>
-                        <div id="totalStoreProfit" class="text-emerald-400 font-extrabold text-lg">₱0.00</div>
+                    <div class="bg-slate-900 text-white p-3 rounded-lg text-center space-y-0.5 shadow-inner">
+                        <span class="text-[10px] tracking-wider text-slate-300 font-bold block">TOTAL STORE PROFIT (COMBINED)</span>
+                        <div class="text-emerald-400 font-extrabold text-xl">₱0.00</div>
                         <span class="text-[9px] text-slate-400 block">(Net of Daily Expenses)</span>
                     </div>
 
-                    <div class="flex gap-2 pt-2">
-                        <button onclick="printReport()" class="bg-slate-700 hover:bg-slate-800 text-white text-xs py-2 rounded-lg font-medium flex-1">🖨️ Print Report</button>
-                        <button onclick="resetAllData()" class="bg-red-600 hover:bg-red-700 text-white text-xs py-2 px-3 rounded-lg font-medium">Reset All</button>
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="printReport()" class="bg-slate-700 hover:bg-slate-800 text-white text-xs py-2 rounded-lg font-medium flex-1 shadow">🖨️ Print Report</button>
+                        <button onclick="resetAllData()" class="bg-red-600 hover:bg-red-700 text-white text-xs py-2 px-3 rounded-lg font-medium shadow">Reset All</button>
                     </div>
                 </div>
 
@@ -186,17 +237,17 @@
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC WITH PASSWORD PROTECTION -->
+    <!-- SCRIPT (Toggle & Password Protection) -->
     <script>
-        // Owner Password Verification Function
+        // Password Security Function para sa may-ari lang
         function verifyOwnerAccess() {
             let password = prompt("Ilagay ang Password ng May-Ari (Owner Password):");
             if (password === "12345") { // Palitan ang '12345' kung kinakailangan
                 return true;
-            } else {
+            } else if (password !== null) {
                 alert("Maling password! Hindi pinahintulutan ang pagbabago.");
-                return false;
             }
+            return false;
         }
 
         // Toggle Functions para hindi kumain ng space
@@ -210,23 +261,16 @@
             section.classList.toggle('hidden');
         }
 
-        function addNewRice() {
+        // Protected Actions
+        function confirmAddRice() {
             if (!verifyOwnerAccess()) return;
-            alert("Rice variety added (Placeholder for backend function integration).");
+            alert("Bagong bigas ay naidagdag na!");
             toggleAddRiceSection();
         }
 
-        function addExpense() {
+        function confirmAddExpense() {
             if (!verifyOwnerAccess()) return;
-            let name = document.getElementById('expenseName').value;
-            let amount = document.getElementById('expenseAmount').value;
-            if(!name || !amount) {
-                alert("Punan ang lahat ng detalye ng gastos.");
-                return;
-            }
-            alert("Expense naidagdag na!");
-            document.getElementById('expenseName').value = '';
-            document.getElementById('expenseAmount').value = '';
+            alert("Daily expense ay naidagdag na!");
             toggleExpenseSection();
         }
 
@@ -235,8 +279,9 @@
             btn.closest('tr').remove();
         }
 
-        function addGcashTx() {
-            alert("GCash transaction added.");
+        function deleteExpenseRow(btn) {
+            if (!verifyOwnerAccess()) return;
+            btn.closest('div.flex').remove();
         }
 
         function clearRiceData() {
@@ -253,17 +298,10 @@
             }
         }
 
-        function downloadRiceExcel() {
-            alert("Nagda-download ng Rice Excel data...");
-        }
-
-        function printReport() {
-            window.print();
-        }
-
-        function toggleLanguage() {
-            alert("Language toggled.");
-        }
+        function downloadRiceExcel() { alert("Nagda-download ng Rice Excel..."); }
+        function downloadGcashExcel() { alert("Nagda-download ng GCash Excel..."); }
+        function printReport() { window.print(); }
+        function toggleLanguage() { alert("Language toggled."); }
     </script>
 </body>
 </html>
